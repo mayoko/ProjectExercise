@@ -1,6 +1,13 @@
 #pragma once
 #include "geometry.h"
 #include <vector>
+#include <AR/config.h>
+#include <AR/video.h>
+#include <AR/param.h>			// arParamDisp()
+#include <AR/ar.h>
+#include <AR/gsub_lite.h>
+
+
 
 /* カメラから受け取った情報でフィールドを構成するクラス */
 
@@ -12,6 +19,7 @@ public:
 		enum {
 			OBSTACLE = 0,
 			CHANGE_DIRECTION = 1,
+			MARK_NUM,
 		};
 		// 何のボードか(いまのところ障害物と方向変換のみ)
 		// 上で定義したenumで管理する
@@ -23,6 +31,6 @@ public:
 	};
 	std::vector<Board> boards;
 	// カメラから受け取った情報でFieldを構成する
-	void receiveData();
+	void receiveData(int marker_num, ARMarkerInfo* marker_info);
 	Field(void);
 };

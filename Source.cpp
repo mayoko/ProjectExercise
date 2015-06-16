@@ -160,7 +160,7 @@ static void Idle(void)
 			arGetTransMat(&(marker_info[k]), gPatt_centre, gPatt_width, gPatt_trans);
 			gPatt_found = TRUE;
 		}
-		
+
 		// Tell GLUT the display has changed.
 		glutPostRedisplay();
 	}
