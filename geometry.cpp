@@ -29,8 +29,7 @@ Real dot(const Pt& a, const Pt& b) {
   return real(conj(a)*b);
 }
 
-inline bool near(const Pt& p, const Pt& q){return abs(p - q) < EPS;}
-
+bool near(const Pt& p, const Pt& q){return abs(p - q) < EPS;}
 
 LPposit ccw(const Pt& p, const Pt& q, const Pt& r) {
   Real c = cross(q-p,r-p);
@@ -42,11 +41,11 @@ LPposit ccw(const Pt& p, const Pt& q, const Pt& r) {
 }
 
 // ü•ª‚Ì’·‚³
-inline Real Sabs(const Line& l) {return abs(l.first - l.second); }
+Real Sabs(const Line& l) {return abs(l.first - l.second); }
 // ’¼ü‚Æ“_‚Ì‹——£
-inline Real LPdist(const Line& l, const Pt& p) {return abs(cross(l.second-l.first,p-l.first)) / Sabs(l); }
+Real LPdist(const Line& l, const Pt& p) {return abs(cross(l.second-l.first,p-l.first)) / Sabs(l); }
 // “_‚Æü•ª‚Ì‹——£
-inline Real SPdist(Line l, Pt p) {
+Real SPdist(Line l, Pt p) {
     Real a = abs(l.first  - p);
     Real b = abs(l.second - p);
     Real c = Sabs(l);
@@ -98,7 +97,6 @@ vector<Pt> circle_line_intersect(Line l,Cir c){
   ret.push_back(c.p+rv+v);
   return ret;
 }
-
 
 bool eq(Real l, Real r)
 {

@@ -2,6 +2,7 @@
 //	Includes
 // ============================================================================
 
+#include "physSimu.h"
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>					// malloc(), free()
@@ -248,68 +249,78 @@ static void Display(void)
 
 int main(int argc, char** argv)
 {
-	char glutGamemode[32];
-	const char *cparam_name = "Data/camera_para.dat";
-	//
-	// Camera configuration.
-	//
-#ifdef _WIN32
-	char			*vconf = "Data\\WDM_camera_flipV.xml";
-#else
-	char			*vconf = "";
-#endif
-	const char *patt_name  = "Data/patt.hiro";
-	
-	// ----------------------------------------------------------------------------
-	// Library inits.
-	//
-
-	glutInit(&argc, argv);
-
-	// ----------------------------------------------------------------------------
-	// Hardware setup.
-	//
-
-	if (!setupCamera(cparam_name, vconf, &gARTCparam)) {
-		fprintf(stderr, "main(): Unable to set up AR camera.\n");
-		exit(-1);
+//	char glutGamemode[32];
+//	const char *cparam_name = "Data/camera_para.dat";
+//	//
+//	// Camera configuration.
+//	//
+//#ifdef _WIN32
+//	char			*vconf = "Data\\WDM_camera_flipV.xml";
+//#else
+//	char			*vconf = "";
+//#endif
+//	const char *patt_name  = "Data/patt.hiro";
+//	
+//	// ----------------------------------------------------------------------------
+//	// Library inits.
+//	//
+//
+//	glutInit(&argc, argv);
+//
+//	// ----------------------------------------------------------------------------
+//	// Hardware setup.
+//	//
+//
+//	if (!setupCamera(cparam_name, vconf, &gARTCparam)) {
+//		fprintf(stderr, "main(): Unable to set up AR camera.\n");
+//		exit(-1);
+//	}
+//	if (!setupMarker(patt_name, &gPatt_id)) {
+//		fprintf(stderr, "main(): Unable to set up AR marker.\n");
+//		exit(-1);
+//	}
+//	
+//	// ----------------------------------------------------------------------------
+//	// Library setup.
+//	//
+//
+//	// Set up GL context(s) for OpenGL to draw into.
+//	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+//	if (!prefWindowed) {
+//		if (prefRefresh) sprintf_s(glutGamemode, "%ix%i:%i@%i", prefWidth, prefHeight, prefDepth, prefRefresh);
+//		else sprintf_s(glutGamemode, "%ix%i:%i", prefWidth, prefHeight, prefDepth);
+//		glutGameModeString(glutGamemode);
+//		glutEnterGameMode();
+//	} else {
+//		glutInitWindowSize(prefWidth, prefHeight);
+//		glutCreateWindow(argv[0]);
+//	}
+//
+//	// Setup argl library for current context.
+//	if ((gArglSettings = arglSetupForCurrentContext()) == NULL) {
+//		fprintf(stderr, "main(): arglSetupForCurrentContext() returned error.\n");
+//		exit(-1);
+//	}
+//	glEnable(GL_DEPTH_TEST);
+//	arUtilTimerReset();
+//		
+//	// Register GLUT event-handling callbacks.
+//	// NB: Idle() is registered by Visibility.
+//	glutDisplayFunc(Display);
+//	glutReshapeFunc(Reshape);
+//	glutVisibilityFunc(Visibility);
+//	
+//	glutMainLoop();
+//
+	physSimu ps;
+	ps.t = 0;
+	ps.circle.r = 0;
+	Field field;
+	ps.changeState(0, 0, 5, 5);
+	for (int i = 0; i < 100; i++) {
+		ps.simulate(field, 0.01*i);
+		ps.print();
 	}
-	if (!setupMarker(patt_name, &gPatt_id)) {
-		fprintf(stderr, "main(): Unable to set up AR marker.\n");
-		exit(-1);
-	}
-	
-	// ----------------------------------------------------------------------------
-	// Library setup.
-	//
-
-	// Set up GL context(s) for OpenGL to draw into.
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-	if (!prefWindowed) {
-		if (prefRefresh) sprintf_s(glutGamemode, "%ix%i:%i@%i", prefWidth, prefHeight, prefDepth, prefRefresh);
-		else sprintf_s(glutGamemode, "%ix%i:%i", prefWidth, prefHeight, prefDepth);
-		glutGameModeString(glutGamemode);
-		glutEnterGameMode();
-	} else {
-		glutInitWindowSize(prefWidth, prefHeight);
-		glutCreateWindow(argv[0]);
-	}
-
-	// Setup argl library for current context.
-	if ((gArglSettings = arglSetupForCurrentContext()) == NULL) {
-		fprintf(stderr, "main(): arglSetupForCurrentContext() returned error.\n");
-		exit(-1);
-	}
-	glEnable(GL_DEPTH_TEST);
-	arUtilTimerReset();
-		
-	// Register GLUT event-handling callbacks.
-	// NB: Idle() is registered by Visibility.
-	glutDisplayFunc(Display);
-	glutReshapeFunc(Reshape);
-	glutVisibilityFunc(Visibility);
-	
-	glutMainLoop();
-
+	while (1);
 	return (0);
 }

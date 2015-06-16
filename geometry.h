@@ -1,6 +1,7 @@
 #pragma once
 #include <complex>
 #include <vector>
+#include <utility>
 
 typedef double Real;
 typedef std::complex<Real> Pt; // ì_
@@ -9,12 +10,13 @@ typedef std::vector<Pt> Poly; // ëΩäpå`
 // â~
 struct Cir {
   Pt p; Real r;
+  Cir() {}
   Cir(const Pt &p, Real r) : p(p), r(r) { }
 };
 bool operator < (const Pt& a, const Pt& b);
 Real cross(const Pt& a, const Pt& b);
 Real dot(const Pt& a, const Pt& b);
-inline bool near(const Pt& p, const Pt& q);
+bool near(const Pt& p, const Pt& q);
 /* ccw :
 CD  : counter direction
 CW  : clock wise
@@ -25,11 +27,11 @@ D   : direction
 enum LPposit { P_CD = -2, P_CW = -1, P_OS = 0, P_CCW = 1, P_D = 2};
 LPposit ccw(const Pt& p, const Pt& q, const Pt& r);
 // ê¸ï™ÇÃí∑Ç≥
-inline Real Sabs(const Line& l);
+Real Sabs(const Line& l);
 // íºê¸Ç∆ì_ÇÃãóó£
-inline Real LPdist(const Line& l, const Pt& p);
+Real LPdist(const Line& l, const Pt& p);
 // ì_Ç∆ê¸ï™ÇÃãóó£
-inline Real SPdist(Line l, Pt p);
+Real SPdist(Line l, Pt p);
 // ê¸ï™åç∑îªíË
 bool crossS(const Line& p, const Line& q);
 // íºê¸ÇÃåç∑îªíË
