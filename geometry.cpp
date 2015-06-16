@@ -102,3 +102,33 @@ bool eq(Real l, Real r)
 {
     return (abs(l-r) < EPS);
 }
+
+int contains(const Poly& P, const Pt& p) {
+  bool in = false;
+  int n = P.size();
+  for (int i = 0; i < n; ++i) {
+    Pt a = P[i] - p, b = P[(i+1)%n] - p;
+    if (imag(a) > imag(b)) swap(a, b);
+    if (imag(a) <= 0 && 0 < imag(b))
+      if (cross(a, b) < 0) in = !in;
+    if (cross(a, b) == 0 && dot(a, b) <= 0) return GEOMETRY_ON;
+  }
+  return in ? GEOMETRY_IN : GEOMETRY_OUT;
+}
+
+Pt normalize(const Pt& p) {
+	return p/abs(p);
+}
+
+Pt reflection(const Pt& v, const Line& l) {
+	Pt p = l.first-l.second;
+	p = normalize(p);
+	Pt vp = p*dot(p, v);
+	Pt vn = v-vp;
+	return vp-vn;
+}
+
+Pt vertical(const Line& l) {
+	Pt p = l.first - l.second;
+	return Pt(-imag(p), real(p));
+}

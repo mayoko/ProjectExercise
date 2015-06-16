@@ -7,6 +7,9 @@
 
 using namespace std;
 
+int dx[4] = {1, 0, -1, 0};
+int dy[4] = {0, 1, 0, -1};
+
 void physSimu::simulate(const Field& field, Real t) {
 	// 以前規定されていた速度を元にオブジェクトを動かす
 	circle.p += Pt(real(v) * (t-this->t), imag(v)*(t-this->t));
@@ -23,7 +26,12 @@ void physSimu::simulate(const Field& field, Real t) {
 				Line l;
 				l.first = board.position[i];
 				l.second = board.position[(i+1)%4];
-				if (circle.r > LPdist(l, circle.p)) {
+				if (circle.r + 0.01 > LPdist(l, circle.p)) {
+					{
+						Pt V = vertical(l);
+						Pt a = circle.p - l.first;
+						if (dot(V, a) * dot(v, v) > 0) continue;
+					}
 					vector<Pt> intersect = circle_line_intersect(l, circle);
 					for (Pt p : intersect) {
 						if (eq(0, SPdist(l, p))) {
@@ -34,12 +42,15 @@ void physSimu::simulate(const Field& field, Real t) {
 				}
 				if (flag) {
 					// ボールが直線にぶつかったとき跳ね返る処理
-
+					v = reflection(v, l);
 					break;
 				}
 			}
 		} else if (id == Field::Board::CHANGE_DIRECTION) {
-			// 矢印の向きに応じて速度を変化させる
+			if (contains(board.position, circle.p) == GEOMETRY_IN) {
+				// 矢印の向きに応じて速度を変化させる
+				v += 0.1*Pt(dx[board.dir], dy[board.dir]);
+			}
 		}
 	}
 	// 任意のシミュレーションで行う処理:摩擦を受けて速度を微減させる

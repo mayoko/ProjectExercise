@@ -15,4 +15,3 @@ public:
 	// ボールの運動を記述する(デバッグ用)
 	void print() const ;
 };
-

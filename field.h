@@ -16,6 +16,8 @@ public:
 		// 何のボードか(いまのところ障害物と方向変換のみ)
 		// 上で定義したenumで管理する
 		int id;
+		// 向き
+		int dir;
 		// 各頂点の位置
 		Poly position;
 	};
