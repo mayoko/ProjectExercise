@@ -67,11 +67,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="field.cpp" />
     <ClCompile Include="geometry.cpp" />
     <ClCompile Include="physSimu.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="field.h" />
     <ClInclude Include="geometry.h" />
     <ClInclude Include="physSimu.h" />
   </ItemGroup>

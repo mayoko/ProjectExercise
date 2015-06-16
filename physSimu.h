@@ -1,5 +1,6 @@
 #pragma once
 #include "geometry.h"
+#include "field.h"
 
 class physSimu
 {
@@ -10,5 +11,7 @@ public:
 	physSimu(void);
 	physSimu(Pt x, double t) : x(x), t(t) {}
 	~physSimu(void);
+	// Field‚ğ“Ç‚İ‚ñ‚¾‚Æ‚«,ƒ{[ƒ‹‚Ì‰^“®‚ğ‹K’è‚·‚é
+	void simulate(const Field& field, Real t);
 };
 
