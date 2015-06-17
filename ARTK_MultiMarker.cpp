@@ -213,25 +213,25 @@ void MainLoop(void)
 			// 前のフレームを使ってマーカの位置・姿勢（座標変換行列）の計算
 			arGetTransMatCont( &marker_info[k], marker[i].patt_trans, marker[i].patt_center, marker[i].patt_width, marker[i].patt_trans );
 		}
-		marker[i].visible = 1;
+			marker[i].visible = 1;
 
 			// 3Dオブジェクトの描画
-			DrawObject( marker[i].mark_id, marker[i].patt_trans );
+			//DrawObject( marker[i].mark_id, marker[i].patt_trans );
 		}
 
 		// バッファの内容を画面に表示
 		argSwapBuffers();
 
-		//認識したマーカーのidと座標表示
-		for(int i=0;i < MARK_NUM;i++ ){
-			for(int  j=0; j<marker_num; j++ ){
-				if( marker[i].patt_id == marker_info[j].id ){
-					cout << marker_info[j].id << "  " << marker_info[j].pos[0] << " " << marker_info[j].pos[1] << endl;
-				}
-			}
-		}
+		////認識したマーカーのidと座標表示
+		//for(int i=0;i < MARK_NUM;i++ ){
+		//	for(int  j=0; j<marker_num; j++ ){
+		//		if( marker[i].patt_id == marker_info[j].id ){
+		//			cout << marker_info[j].id << "  " << marker_info[j].pos[0] << " " << marker_info[j].pos[1] << endl;
+		//		}
+		//	}
+		//}
 
-	}
+	
 }
 
 

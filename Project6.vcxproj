@@ -67,10 +67,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ARTK_MultiMarker.cpp" />
     <ClCompile Include="field.cpp" />
     <ClCompile Include="geometry.cpp" />
     <ClCompile Include="physSimu.cpp" />
-    <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="field.h" />
