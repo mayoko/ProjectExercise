@@ -42,3 +42,13 @@ Pt line_line_intersect(const Line &p, const Line &q);
 // 円と直線の交点
 std::vector<Pt> circle_line_intersect(Line l,Cir c);
 bool eq(Real l, Real r);
+// 点の内部/境界/外部のフラグ
+enum {GEOMETRY_IN, GEOMETRY_ON, GEOMETRY_OUT};
+// 点が多角形の内部/境界/外部のどこにあるのかを判定する
+int contains(const Poly& P, const Pt& p);
+// 正規化
+Pt normalize(const Pt& p);
+// 反射させるやつ(vという速度がLine lに進入してきたとき,vを反射させる)
+Pt reflection(const Pt& v, const Line& l);
+// 直線に垂直なベクトルを提示する
+Pt vertical(const Line& l);
