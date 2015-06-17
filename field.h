@@ -19,7 +19,7 @@ public:
 		enum {
 			OBSTACLE = 0,
 			CHANGE_DIRECTION = 1,
-			MARK_NUM,
+			EFFECT_NUM,
 		};
 		// 何のボードか(いまのところ障害物と方向変換のみ)
 		// 上で定義したenumで管理する

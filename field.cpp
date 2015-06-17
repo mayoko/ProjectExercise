@@ -11,7 +11,7 @@ Field::Field(void)
 void Field::receiveData(int marker_num, ARMarkerInfo* marker_info) {
 	//認識したマーカーのidと座標
 	//TODO ほかのファイルとの整合性をあわせる
-		for(int i=0;i < Board::MARK_NUM;i++ ){
+		for(int i=0;i < Board::EFFECT_NUM;i++ ){
 			for(int  j=0; j<marker_num; j++ ){
 				if( i == marker_info[j].id ){//ほんとにiと==とればいいの?
 				
