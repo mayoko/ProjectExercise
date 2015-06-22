@@ -36,5 +36,6 @@ public:
 	std::map<int, int> trans;
 	// ƒJƒƒ‰‚©‚çó‚¯æ‚Á‚½î•ñ‚ÅField‚ğ\¬‚·‚é
 	void receiveData(int marker_num, ARMarkerInfo* marker_info);
+	void clear();
 	Field(void);
 };

@@ -170,6 +170,8 @@ void MainLoop(void)
 	int              marker_num;		// 検出されたマーカの数
 	int              i, j, k;
 
+	// フィールドの初期化
+	gfield.clear();
 	// カメラ画像の取得
 	if( (image = (ARUint8 *)arVideoGetImage()) == NULL ){
 		arUtilSleep( 2 );
@@ -187,6 +189,7 @@ void MainLoop(void)
 		Cleanup();
 		exit(0);
 	}
+	gfield.receiveData(marker_num, marker_info);
 
 	// 次の画像のキャプチャ指示
 	arVideoCapNext();
@@ -198,7 +201,7 @@ void MainLoop(void)
 	//glClear( GL_DEPTH_BUFFER_BIT );		// デプスバッファの初期化
 
 	// マーカの一致度の比較
-	for( i=0; i<MARK_NUM; i++ ){
+	for( i=0; i<marker_num; i++ ){
 		k = -1;
 		for( j=0; j<marker_num; j++ ){
 			if( marker[i].patt_id == marker_info[j].id ){

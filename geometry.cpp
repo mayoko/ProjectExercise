@@ -117,18 +117,18 @@ int contains(const Poly& P, const Pt& p) {
 }
 
 Pt normalize(const Pt& p) {
-	return p/abs(p);
+    return p/abs(p);
 }
 
 Pt reflection(const Pt& v, const Line& l) {
-	Pt p = l.first-l.second;
-	p = normalize(p);
-	Pt vp = p*dot(p, v);
-	Pt vn = v-vp;
-	return vp-vn;
+    Pt p = l.first-l.second;
+    p = normalize(p);
+    Pt vp = p*dot(p, v);
+    Pt vn = v-vp;
+    return vp-vn;
 }
 
 Pt vertical(const Line& l) {
-	Pt p = l.first - l.second;
-	return Pt(-imag(p), real(p));
+    Pt p = l.first - l.second;
+    return Pt(-imag(p), real(p));
 }

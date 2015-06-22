@@ -20,7 +20,11 @@ void Field::receiveData(int marker_num, ARMarkerInfo* marker_info) {
 		for(int vertex_num = 0; vertex_num < 4;vertex_num++){
 			new_board.position.emplace_back(marker_info[j].vertex[vertex_num][0],marker_info[j].vertex[vertex_num][1]);
 		}
-		boards.push_back(new_board);
+		if (marker_info[j].cf > 0.5) boards.push_back(new_board);
 
 	}
+}
+
+void Field::clear() {
+	boards.clear();
 }
