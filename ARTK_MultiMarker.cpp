@@ -6,10 +6,13 @@
 
 #pragma warning(disable:4819)
 
+#include "field.h"
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <utility>
+#include <map>
 
 #define _USE_MATH_DEFINES	// math.hのM_PIを使うため
 #include <math.h>			// 角度計算用
@@ -31,11 +34,15 @@ int  ysize;											// ウィンドウサイズ
 int  thresh = 100;									// 2値化の閾値
 int  count = 0;										// 処理フレーム数
 
+// フィールド
+Field gfield;
+
 /* カメラパラメータ */
 char *cparam_name = "Data/calib_params_0610.dat";			// カメラパラメータファイル
 ARParam cparam;										// カメラパラメータ
 
 /* パターンファイル */
+/*! パターンファイルはFieldクラスに定義されている順番に定義すること !*/
 #define MARK_NUM		3						// 使用するマーカーの個数
 //-----
 #define MARK1_MARK_ID	1						// マーカーID
@@ -135,8 +142,9 @@ void Init(void)
 	arParamDisp( &cparam );
 
 	// パターンファイルのロード
-	for( int i=0; i<MARK_NUM; i++ ){
+	for( int i=0; i<Field::Board::EFFECT_NUM; i++ ){
 		if( (marker[i].patt_id = arLoadPatt(marker[i].patt_name)) < 0){
+			gfield.trans.insert(std::pair<int, int>(marker[i].patt_id, i));
 			printf("パターンファイルの読み込みに失敗しました\n");
 			printf("%s\n", marker[i].patt_name);
 			while(1);
@@ -221,17 +229,6 @@ void MainLoop(void)
 
 		// バッファの内容を画面に表示
 		argSwapBuffers();
-
-		////認識したマーカーのidと座標表示
-		//for(int i=0;i < MARK_NUM;i++ ){
-		//	for(int  j=0; j<marker_num; j++ ){
-		//		if( marker[i].patt_id == marker_info[j].id ){
-		//			cout << marker_info[j].id << "  " << marker_info[j].pos[0] << " " << marker_info[j].pos[1] << endl;
-		//		}
-		//	}
-		//}
-
-	
 }
 
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "geometry.h"
 #include <vector>
+#include <map>
 #include <AR/config.h>
 #include <AR/video.h>
 #include <AR/param.h>			// arParamDisp()
@@ -30,6 +31,9 @@ public:
 		Poly position;
 	};
 	std::vector<Board> boards;
+	// ARToolKitのidとBoardクラスのidのすり合わせ
+	// trans[patt_id] = AR内部でpatt_idと解釈されるのがBoardではどのidになるか
+	std::map<int, int> trans;
 	// カメラから受け取った情報でFieldを構成する
 	void receiveData(int marker_num, ARMarkerInfo* marker_info);
 	Field(void);
