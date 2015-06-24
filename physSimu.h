@@ -18,6 +18,8 @@ public:
 	void simulate(const Field& field, Real t);
 	//ボールを発射するための処理
 	void shootBall(const Field& field);
+	//ボールを発射したか否か
+	bool ballIsMoving; 
 	// ボールの運動を記述する(デバッグ用)
 	void print() const ;
 };

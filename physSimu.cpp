@@ -24,7 +24,9 @@ const Real radius = 10;
 //ƒ{[ƒ‹‚Ì‰Šú‘¬‚³
 const Real ballStartV = 50;
 
-physSimu::physSimu() {}
+physSimu::physSimu() {
+	ballIsMoving = false;
+}
 
 void physSimu::wallDetect() {
 	if (real(circle.p) + circle.r + 0.01 < width) {

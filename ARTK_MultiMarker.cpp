@@ -41,8 +41,6 @@ Field gfield;
 // ボール
 physSimu gsimulator;
 
-//ボールを発射したか否か
-static bool ballIsMoving  = false; 
 
 /* カメラパラメータ */
 char *cparam_name = "Data/camera_para.dat";			// カメラパラメータファイル
@@ -371,8 +369,7 @@ void SetupMaterial2(void)
 void KeyEvent( unsigned char key, int x, int y )
 {
 	//Enterキーを入力したらボールを発射
-	if(key == 0x0D && !ballIsMoving){
-		ballIsMoving = true;
+	if(key == 0x0D && !gsimulator.ballIsMoving){
 		gsimulator.shootBall(gfield);
 	}else if (key == 0x1b ){// ESCキーを入力したらアプリケーション終了
 		printf("*** %f (frame/sec)\n", (double)count/arUtilTimer());
