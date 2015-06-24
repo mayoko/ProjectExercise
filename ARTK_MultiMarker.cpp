@@ -14,6 +14,7 @@
 #include <iostream>
 #include <utility>
 #include <map>
+#include <chrono>
 
 #define _USE_MATH_DEFINES	// math.hのM_PIを使うため
 #include <math.h>			// 角度計算用
@@ -41,6 +42,8 @@ Field gfield;
 // ボール
 physSimu gsimulator;
 
+// 時間計測開始時間
+std::chrono::system_clock::time_point start;
 
 /* カメラパラメータ */
 char *cparam_name = "Data/camera_para.dat";			// カメラパラメータファイル
@@ -96,6 +99,8 @@ void DrawObject( int mark_id, double patt_trans[3][4] );
 //=======================================================
 int main( int argc, char **argv )
 {
+	// gsimulatorの初期化
+	gsimulator.changeState(380, 250, 30, 30);
 
 	// GLUTの初期化
 	glutInit( &argc, argv );
@@ -204,34 +209,34 @@ void MainLoop(void)
 	glClear( GL_DEPTH_BUFFER_BIT );		// デプスバッファの初期化
 
 	// マーカの一致度の比較
-	for( i=0; i<marker_num; i++ ){
-		k = -1;
-		for( j=0; j<marker_num; j++ ){
-			if( marker[i].patt_id == marker_info[j].id ){
-				if( k == -1 ) k = j;
-				else if( marker_info[k].cf < marker_info[j].cf ) k = j;
-			}
-		}
+	//for( i=0; i<marker_num; i++ ){
+	//	k = -1;
+	//	for( j=0; j<marker_num; j++ ){
+	//		if( marker[i].patt_id == marker_info[j].id ){
+	//			if( k == -1 ) k = j;
+	//			else if( marker_info[k].cf < marker_info[j].cf ) k = j;
+	//		}
+	//	}
 
-		// マーカーが見つからなかったとき
-		if( k == -1 ){
-			marker[i].visible = 0;
-			continue;
-		}
+	//	// マーカーが見つからなかったとき
+	//	if( k == -1 ){
+	//		marker[i].visible = 0;
+	//		continue;
+	//	}
 
-		// 座標変換行列を取得
-		if( marker[i].visible == 0 ) {
-			// 1フレームを使ってマーカの位置・姿勢（座標変換行列）の計算
-			arGetTransMat( &marker_info[k], marker[i].patt_center, marker[i].patt_width, marker[i].patt_trans );
-		} else {
-			// 前のフレームを使ってマーカの位置・姿勢（座標変換行列）の計算
-			arGetTransMatCont( &marker_info[k], marker[i].patt_trans, marker[i].patt_center, marker[i].patt_width, marker[i].patt_trans );
-		}
-			marker[i].visible = 1;
+	//	// 座標変換行列を取得
+	//	if( marker[i].visible == 0 ) {
+	//		// 1フレームを使ってマーカの位置・姿勢（座標変換行列）の計算
+	//		arGetTransMat( &marker_info[k], marker[i].patt_center, marker[i].patt_width, marker[i].patt_trans );
+	//	} else {
+	//		// 前のフレームを使ってマーカの位置・姿勢（座標変換行列）の計算
+	//		arGetTransMatCont( &marker_info[k], marker[i].patt_trans, marker[i].patt_center, marker[i].patt_width, marker[i].patt_trans );
+	//	}
+	//		marker[i].visible = 1;
 
-			// 3Dオブジェクトの描画
-			//DrawObject( marker[i].mark_id, marker[i].patt_trans );
-		}
+	//		// 3Dオブジェクトの描画
+	//		//DrawObject( marker[i].mark_id, marker[i].patt_trans );
+	//	}
 
 		// バッファの内容を画面に表示
 		argSwapBuffers();
