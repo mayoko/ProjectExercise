@@ -45,7 +45,7 @@ physSimu gsimulator;
 static bool ballIsMoving  = false; 
 
 /* カメラパラメータ */
-char *cparam_name = "Data/calib_params_0610.dat";			// カメラパラメータファイル
+char *cparam_name = "Data/camera_para.dat";			// カメラパラメータファイル
 ARParam cparam;										// カメラパラメータ
 
 /* パターンファイル */
@@ -187,9 +187,8 @@ void MainLoop(void)
 	count++;
 
 	// カメラ画像の描画
-	/*argDrawMode2D();
+	argDrawMode2D();
 	argDispImage( image, 0, 0 );
-	*/
 	// マーカの検出と認識
 	if( arDetectMarker( image, thresh, &marker_info, &marker_num ) < 0 ){
 		Cleanup();
@@ -200,11 +199,11 @@ void MainLoop(void)
 	// 次の画像のキャプチャ指示
 	arVideoCapNext();
 
-	//// 3Dオブジェクトを描画するための準備
-	//argDrawMode3D();
-	//argDraw3dCamera( 0, 0 );
-	//glClearDepth(1.0);					// デプスバッファの消去値
-	//glClear( GL_DEPTH_BUFFER_BIT );		// デプスバッファの初期化
+	// 3Dオブジェクトを描画するための準備
+	argDrawMode3D();
+	argDraw3dCamera( 0, 0 );
+	glClearDepth(1.0);					// デプスバッファの消去値
+	glClear( GL_DEPTH_BUFFER_BIT );		// デプスバッファの初期化
 
 	// マーカの一致度の比較
 	for( i=0; i<marker_num; i++ ){
@@ -244,127 +243,127 @@ void MainLoop(void)
 //=======================================================
 // 3Dオブジェクトの描画を行う関数
 //=======================================================
-//void DrawObject( int mark_id, double patt_trans[3][4] )
-//{
-//	double gl_para[16];	// ARToolKit->OpenGL変換行列
-//
-//	// 陰面消去
-//	glEnable( GL_DEPTH_TEST );			// 陰面消去・有効
-//	glDepthFunc( GL_LEQUAL );			// デプステスト
-//
-//	// 変換行列の適用
-//	argConvGlpara( patt_trans, gl_para );	// ARToolKitからOpenGLの行列に変換
-//	glMatrixMode( GL_MODELVIEW );			// 行列変換モード・モデルビュー
-//	glLoadMatrixd( gl_para );				// 読み込む行列を指定
-//
-//	switch( mark_id ){
-//		case MARK1_MARK_ID:
-//			// ライティング
-//			SetupLighting1();			// ライトの定義
-//			glEnable( GL_LIGHTING );	// ライティング・有効
-//			glEnable( GL_LIGHT0 );		// ライト0・オン
-//			// オブジェクトの材質
-//			SetupMaterial1();
-//
-//			// 3Dオブジェクトの描画
-//			glTranslatef( 0.0, 0.0, 25.0 );	// マーカの上に載せるためにZ方向（マーカ上方）に25.0[mm]移動
-//			glutSolidCube( 150.0 );			// ソリッドキューブを描画（1辺のサイズ50[mm]）
-//			break;
-//
-//		case MARK2_MARK_ID:
-//			// ライティング
-//			SetupLighting2();			// ライトの定義
-//			glEnable( GL_LIGHTING );	// ライティング・有効
-//			glEnable( GL_LIGHT0 );		// ライト0・オン
-//			// オブジェクトの材質
-//			SetupMaterial2();
-//
-//			// 3Dオブジェクトの描画
-//			glTranslatef( 0.0, 0.0, 25.0 );		// マーカの上に載せるためにZ方向（マーカ上方）に25.0[mm]移動
-//			glutSolidSphere( 50.0, 10, 10 );	// ソリッドスフィアを描画（1辺のサイズ50[mm]）
-//			break;
-//
-//		case MARK3_MARK_ID:
-//			// ライティング
-//			SetupLighting1();			// ライトの定義
-//			glEnable( GL_LIGHTING );	// ライティング・有効
-//			glEnable( GL_LIGHT0 );		// ライト0・オン
-//			// オブジェクトの材質
-//			SetupMaterial2();
-//
-//			// 3Dオブジェクトの描画
-//			glTranslatef( 0.0, 0.0, 25.0 );	// マーカの上に載せるためにZ方向（マーカ上方）に25.0[mm]移動
-//			glRotated( 90, 1.0, 0.0, 0.0);	// ティーポットをマーカ上に載せるために90°回転
-//			glutSolidTeapot( 50.0 );		// ソリッドティーポットを描画（サイズ50[mm]）
-//			break;
-//	}
-//
-//
-//	// 終了処理
-//	glDisable( GL_LIGHTING );		// ライティング・無効
-//	glDisable( GL_DEPTH_TEST );		// デプステスト・無効
-//}
+void DrawObject( int mark_id, double patt_trans[3][4] )
+{
+	double gl_para[16];	// ARToolKit->OpenGL変換行列
 
-//
-////=======================================================
-//// ライティング
-////=======================================================
-//void SetupLighting1(void)
-//{
-//	// ライトの定義
-//	GLfloat lt0_position[] = {100.0, -200.0, 200.0, 0.0};	// ライト0の位置
-//	GLfloat lt0_ambient[]  = {0.1, 0.1, 0.1, 1.0};			// 　　　　 環境光
-//	GLfloat lt0_diffuse[]  = {0.8, 0.8, 0.8, 1.0};			// 　　　　 拡散光
-//
-//	// ライトの設定
-//	glLightfv( GL_LIGHT0, GL_POSITION, lt0_position );
-//	glLightfv( GL_LIGHT0, GL_AMBIENT, lt0_ambient );
-//	glLightfv( GL_LIGHT0, GL_DIFFUSE, lt0_diffuse );
-//}
-//
-//void SetupLighting2(void)
-//{
-//	// ライトの定義
-//	GLfloat lt0_position[] = {100.0, 200.0, 200.0, 0.0};	// ライト0の位置
-//	GLfloat lt0_ambient[]  = {0.2, 0.2, 0.2, 1.0};			// 　　　　 環境光
-//	GLfloat lt0_diffuse[]  = {0.8, 0.8, 0.8, 1.0};			// 　　　　 拡散光
-//
-//	// ライトの設定
-//	glLightfv( GL_LIGHT0, GL_POSITION, lt0_position );
-//	glLightfv( GL_LIGHT0, GL_AMBIENT, lt0_ambient );
-//	glLightfv( GL_LIGHT0, GL_DIFFUSE, lt0_diffuse );
-//}
+	// 陰面消去
+	glEnable( GL_DEPTH_TEST );			// 陰面消去・有効
+	glDepthFunc( GL_LEQUAL );			// デプステスト
 
-//
-////=======================================================
-//// マテリアルの設定
-////=======================================================
-//void SetupMaterial1(void)
-//{
-//	// オブジェクトの材質
-//	GLfloat mat_ambient[] = {0.0, 1.0, 1.0, 1.0};	// 材質の環境光
-//	GLfloat mat_specular[] = {0.0, 0.0, 1.0, 1.0};	// 鏡面光
-//	GLfloat mat_shininess[] = {50.0};				// 鏡面係数
-//
-//	// マテリアルの設定
-//	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
-//	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-//	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-//}
-//
-//void SetupMaterial2(void)
-//{
-//	// オブジェクトの材質
-//	GLfloat mat_ambient[] = {0.0, 0.0, 1.0, 1.0};	// 材質の環境光
-//	GLfloat mat_specular[] = {0.0, 0.0, 1.0, 1.0};	// 鏡面光
-//	GLfloat mat_shininess[] = {50.0};				// 鏡面係数
-//
-//	// マテリアルの設定
-//	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
-//	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-//	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-//}
-//
+	// 変換行列の適用
+	argConvGlpara( patt_trans, gl_para );	// ARToolKitからOpenGLの行列に変換
+	glMatrixMode( GL_MODELVIEW );			// 行列変換モード・モデルビュー
+	glLoadMatrixd( gl_para );				// 読み込む行列を指定
+
+	switch( mark_id ){
+		case MARK1_MARK_ID:
+			// ライティング
+			SetupLighting1();			// ライトの定義
+			glEnable( GL_LIGHTING );	// ライティング・有効
+			glEnable( GL_LIGHT0 );		// ライト0・オン
+			// オブジェクトの材質
+			SetupMaterial1();
+
+			// 3Dオブジェクトの描画
+			glTranslatef( 0.0, 0.0, 25.0 );	// マーカの上に載せるためにZ方向（マーカ上方）に25.0[mm]移動
+			glutSolidCube( 150.0 );			// ソリッドキューブを描画（1辺のサイズ50[mm]）
+			break;
+
+		case MARK2_MARK_ID:
+			// ライティング
+			SetupLighting2();			// ライトの定義
+			glEnable( GL_LIGHTING );	// ライティング・有効
+			glEnable( GL_LIGHT0 );		// ライト0・オン
+			// オブジェクトの材質
+			SetupMaterial2();
+
+			// 3Dオブジェクトの描画
+			glTranslatef( 0.0, 0.0, 25.0 );		// マーカの上に載せるためにZ方向（マーカ上方）に25.0[mm]移動
+			glutSolidSphere( 50.0, 10, 10 );	// ソリッドスフィアを描画（1辺のサイズ50[mm]）
+			break;
+
+		case MARK3_MARK_ID:
+			// ライティング
+			SetupLighting1();			// ライトの定義
+			glEnable( GL_LIGHTING );	// ライティング・有効
+			glEnable( GL_LIGHT0 );		// ライト0・オン
+			// オブジェクトの材質
+			SetupMaterial2();
+
+			// 3Dオブジェクトの描画
+			glTranslatef( 0.0, 0.0, 25.0 );	// マーカの上に載せるためにZ方向（マーカ上方）に25.0[mm]移動
+			glRotated( 90, 1.0, 0.0, 0.0);	// ティーポットをマーカ上に載せるために90°回転
+			glutSolidTeapot( 50.0 );		// ソリッドティーポットを描画（サイズ50[mm]）
+			break;
+	}
+
+
+	// 終了処理
+	glDisable( GL_LIGHTING );		// ライティング・無効
+	glDisable( GL_DEPTH_TEST );		// デプステスト・無効
+}
+
+
+//=======================================================
+// ライティング
+//=======================================================
+void SetupLighting1(void)
+{
+	// ライトの定義
+	GLfloat lt0_position[] = {100.0, -200.0, 200.0, 0.0};	// ライト0の位置
+	GLfloat lt0_ambient[]  = {0.1, 0.1, 0.1, 1.0};			// 　　　　 環境光
+	GLfloat lt0_diffuse[]  = {0.8, 0.8, 0.8, 1.0};			// 　　　　 拡散光
+
+	// ライトの設定
+	glLightfv( GL_LIGHT0, GL_POSITION, lt0_position );
+	glLightfv( GL_LIGHT0, GL_AMBIENT, lt0_ambient );
+	glLightfv( GL_LIGHT0, GL_DIFFUSE, lt0_diffuse );
+}
+
+void SetupLighting2(void)
+{
+	// ライトの定義
+	GLfloat lt0_position[] = {100.0, 200.0, 200.0, 0.0};	// ライト0の位置
+	GLfloat lt0_ambient[]  = {0.2, 0.2, 0.2, 1.0};			// 　　　　 環境光
+	GLfloat lt0_diffuse[]  = {0.8, 0.8, 0.8, 1.0};			// 　　　　 拡散光
+
+	// ライトの設定
+	glLightfv( GL_LIGHT0, GL_POSITION, lt0_position );
+	glLightfv( GL_LIGHT0, GL_AMBIENT, lt0_ambient );
+	glLightfv( GL_LIGHT0, GL_DIFFUSE, lt0_diffuse );
+}
+
+
+//=======================================================
+// マテリアルの設定
+//=======================================================
+void SetupMaterial1(void)
+{
+	// オブジェクトの材質
+	GLfloat mat_ambient[] = {0.0, 1.0, 1.0, 1.0};	// 材質の環境光
+	GLfloat mat_specular[] = {0.0, 0.0, 1.0, 1.0};	// 鏡面光
+	GLfloat mat_shininess[] = {50.0};				// 鏡面係数
+
+	// マテリアルの設定
+	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+}
+
+void SetupMaterial2(void)
+{
+	// オブジェクトの材質
+	GLfloat mat_ambient[] = {0.0, 0.0, 1.0, 1.0};	// 材質の環境光
+	GLfloat mat_specular[] = {0.0, 0.0, 1.0, 1.0};	// 鏡面光
+	GLfloat mat_shininess[] = {50.0};				// 鏡面係数
+
+	// マテリアルの設定
+	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+}
+
 
 //=======================================================
 // キーボード入力処理関数

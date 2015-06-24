@@ -37,7 +37,7 @@ void Field::receiveData(int marker_num, ARMarkerInfo* marker_info) {
 			new_board.position.emplace_back(vec.mat[0][0],vec.mat[1][0]);
 		}
 		boards.push_back(new_board);
-
+		cout << new_board.id << " " << real(new_board.position[0]) << " " << imag(new_board.position[0]) << endl;
 	}
 }
 

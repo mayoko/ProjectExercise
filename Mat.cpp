@@ -15,9 +15,8 @@ Mat::Mat(int n, int m) {
 
 Mat mul(const Mat& A, const Mat& B) {
 	int n = A.mat.size();
-	int m = A.mat[0].size();
-	int l = B.mat[0].size();
-	assert(A.mat[0].size() == B.mat.size());
+	int m = B.mat[0].size();
+	int l = A.mat[0].size();
 	Mat ret(n, m);
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < m; j++) {
