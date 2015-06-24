@@ -9,16 +9,15 @@ public:
 	Cir circle; // 座標および半径
 	Pt v; // 速度
 	Real t; // 時間
-	const Real damp; // 毎周期落ちる速度
-	const Real cdAccel; // CHANGE_DIRECTIONで加速するやつ
-	const Real width; // 幅
-	const Real height; // 高さ
+	physSimu();
 	// 物理シミュレーション関係なく位置,速度を変更する
 	void changeState(Real x, Real y, Real vx, Real vy);
+	// 壁にぶつかるかを探知してぶつかるなら速度を反転させる
+	void wallDetect();
 	// Fieldおよび時間を読み込んだとき,ボールの運動を規定する
 	void simulate(const Field& field, Real t);
 	//ボールを発射するための処理
-	void shootBall();
+	void shootBall(const Field& field);
 	// ボールの運動を記述する(デバッグ用)
 	void print() const ;
 };

@@ -10,16 +10,72 @@ using namespace std;
 const int dx[4] = {1, 0, -1, 0};
 const int dy[4] = {0, 1, 0, -1};
 
+// 減衰項
 const Real damp = 5;
+// 矢印パネルでの加速項
 const Real cdAccel = 5;
-const Real width = 782;  
+// フィールドの幅
+const Real width = 782;
+// フィールドの高さ
 const Real height = 530;
+
+//ボールの半径
+const Real radius = 10;
+//ボールの初期速さ
+const Real ballStartV = 50;
+
+physSimu::physSimu() {}
+
+void physSimu::wallDetect() {
+	if (real(circle.p) + circle.r + 0.01 < width) {
+		Line l;
+		l.first = Pt(width, 0); l.second = Pt(width, height);
+		Pt V = vertical(l);
+		Pt a = circle.p - l.first;
+		if (dot(V, a) * dot(V, v) < 0) {
+			v = reflection(v, l);
+			return;
+		}
+	}
+	if (real(circle.p) + circle.r - 0.01 > 0) {
+		Line l;
+		l.first = Pt(0, 0); l.second = Pt(0, height);
+		Pt V = vertical(l);
+		Pt a = circle.p - l.first;
+		if (dot(V, a) * dot(V, v) < 0) {
+			v = reflection(v, l);
+			return;
+		}
+	}
+	if (imag(circle.p) + circle.r + 0.01 < height) {
+		Line l;
+		l.first = Pt(0, height); l.second = Pt(width, height);
+		Pt V = vertical(l);
+		Pt a = circle.p - l.first;
+		if (dot(V, a) * dot(V, v) < 0) {
+			v = reflection(v, l);
+			return;
+		}
+	}
+	if (imag(circle.p) + circle.r - 0.01 > 0) {
+		Line l;
+		l.first = Pt(0, 0); l.second = Pt(width, 0);
+		Pt V = vertical(l);
+		Pt a = circle.p - l.first;
+		if (dot(V, a) * dot(V, v) < 0) {
+			v = reflection(v, l);
+			return;
+		}
+	}
+}
 
 void physSimu::simulate(const Field& field, Real t) {
 	// 以前規定されていた速度を元にオブジェクトを動かす
 	Real dt = t-this->t;
 	circle.p += Pt(real(v) * dt, imag(v)*dt);
 	this->t = t;
+	// 壁にぶつかるなら速度を反転させる
+	wallDetect();
 	// firldにおかれている各オブジェクトに対して作用するものがあればそのように動かす
 	int n = field.boards.size();
 	for (Field::Board board : field.boards) {
@@ -66,8 +122,19 @@ void physSimu::simulate(const Field& field, Real t) {
 	v *= (length-minus) / length;
 }
 
-void physSimu::shootBall(){
-
+void physSimu::shootBall(const Field& field){
+	// firldにおかれている各オブジェクトのなかでスタート用パネルを探し、処理する
+	int n = field.boards.size();
+	for (Field::Board board : field.boards) {
+		int id = board.id;
+		if (id == Field::Board::START) {
+			//4頂点の重心が中心座標
+			Pt ballStartPos = (board.position[0] +board.position[1] +board.position[2] +board.position[3]) / 4.0;
+			Cir ball(ballStartPos,radius);
+			physSimu::circle = ball;
+			physSimu::v = Pt(0,ballStartV);
+		}
+	}
 }
 
 void physSimu::changeState(Real x, Real y, Real vx, Real vy) {

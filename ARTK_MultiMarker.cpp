@@ -38,6 +38,9 @@ int  count = 0;										// 処理フレーム数
 // フィールド
 Field gfield;
 
+// ボール
+physSimu gsimulator;
+
 /* カメラパラメータ */
 char *cparam_name = "Data/calib_params_0610.dat";			// カメラパラメータファイル
 ARParam cparam;										// カメラパラメータ
@@ -373,7 +376,7 @@ void KeyEvent( unsigned char key, int x, int y )
 	//Enterキーを入力したらボールを発射
 	if(key == 0x0D && !ballIsMoving){
 		ballIsMoving = true;
-		simu.shootBall();
+		simu.shootBall(gfield);
 	}else if (key == 0x1b ){// ESCキーを入力したらアプリケーション終了
 		printf("*** %f (frame/sec)\n", (double)count/arUtilTimer());
 		Cleanup();
