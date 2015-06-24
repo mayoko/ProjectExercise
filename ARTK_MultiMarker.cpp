@@ -54,15 +54,15 @@ ARParam cparam;										// カメラパラメータ
 #define MARK_NUM		3						// 使用するマーカーの個数
 //-----
 #define MARK1_MARK_ID	1						// マーカーID
-#define MARK1_PATT_NAME	"Data\\multi\\patt.a"		// パターンファイル名
+#define MARK1_PATT_NAME	"Data\\patt.wall"		// パターンファイル名
 #define MARK1_SIZE		40.0					// パターンの幅（40mm）
 //-----
 #define MARK2_MARK_ID	2						// マーカーID
-#define MARK2_PATT_NAME	"Data\\multi\\patt.b"	// パターンファイル名
+#define MARK2_PATT_NAME	"Data\\patt.cd "	// パターンファイル名
 #define MARK2_SIZE		40.0					// パターンの幅（40mm）
 //-----
 #define MARK3_MARK_ID	3						// マーカーID
-#define MARK3_PATT_NAME	"Data\\multi\\patt.c"		// パターンファイル名
+#define MARK3_PATT_NAME	"Data\\multi\\patt.start"		// パターンファイル名
 #define MARK3_SIZE		40.0					// パターンの幅（40mm）
 //-----
 typedef struct {
