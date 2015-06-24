@@ -7,6 +7,7 @@
 #pragma warning(disable:4819)
 
 #include "field.h"
+#include "physSimu.h"
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -36,6 +37,9 @@ int  count = 0;										// 処理フレーム数
 
 // フィールド
 Field gfield;
+
+// ボール
+physSimu gsimulator;
 
 /* カメラパラメータ */
 char *cparam_name = "Data/calib_params_0610.dat";			// カメラパラメータファイル
