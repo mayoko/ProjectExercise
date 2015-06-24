@@ -17,6 +17,8 @@ public:
 	void changeState(Real x, Real y, Real vx, Real vy);
 	// Fieldおよび時間を読み込んだとき,ボールの運動を規定する
 	void simulate(const Field& field, Real t);
+	//ボールを発射するための処理
+	void shootBall();
 	// ボールの運動を記述する(デバッグ用)
 	void print() const ;
 };

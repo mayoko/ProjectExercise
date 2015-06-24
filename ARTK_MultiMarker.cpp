@@ -7,6 +7,7 @@
 #pragma warning(disable:4819)
 
 #include "field.h"
+#include "physSimu.h"
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -73,6 +74,10 @@ MARK_T   marker[MARK_NUM] = {
 	{MARK3_PATT_NAME, -1, MARK3_MARK_ID, 0, MARK3_SIZE, {0.0, 0.0}}
 };
 
+//ボールを発射したか否か
+static bool ballIsMoving  = false; 
+//
+physSimu simu;
 
 // プロトタイプ宣言
 void Init(void);
@@ -365,8 +370,11 @@ void MainLoop(void)
 //=======================================================
 void KeyEvent( unsigned char key, int x, int y )
 {
-	// ESCキーを入力したらアプリケーション終了
-	if (key == 0x1b ){
+	//Enterキーを入力したらボールを発射
+	if(key == 0x0D && !ballIsMoving){
+		ballIsMoving = true;
+		simu.shootBall();
+	}else if (key == 0x1b ){// ESCキーを入力したらアプリケーション終了
 		printf("*** %f (frame/sec)\n", (double)count/arUtilTimer());
 		Cleanup();
 		exit(0);

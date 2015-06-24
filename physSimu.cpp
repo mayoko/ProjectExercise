@@ -12,7 +12,7 @@ const int dy[4] = {0, 1, 0, -1};
 
 const Real damp = 5;
 const Real cdAccel = 5;
-const Real width = 782;
+const Real width = 782;  
 const Real height = 530;
 
 void physSimu::simulate(const Field& field, Real t) {
@@ -64,6 +64,10 @@ void physSimu::simulate(const Field& field, Real t) {
 	if (eq(length, 0)) return;
 	Real minus = min(damp, length);
 	v *= (length-minus) / length;
+}
+
+void physSimu::shootBall(){
+
 }
 
 void physSimu::changeState(Real x, Real y, Real vx, Real vy) {

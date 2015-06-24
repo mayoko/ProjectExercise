@@ -20,6 +20,7 @@ public:
 		enum {
 			OBSTACLE = 0,
 			CHANGE_DIRECTION = 1,
+			START = 2,
 			EFFECT_NUM,
 		};
 		// ‰½‚Ìƒ{[ƒh‚©(‚¢‚Ü‚Ì‚Æ‚±‚ëáŠQ•¨‚Æ•ûŒü•ÏŠ·‚Ì‚Ý)
