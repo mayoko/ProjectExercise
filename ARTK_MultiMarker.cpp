@@ -15,6 +15,7 @@
 #include <utility>
 #include <map>
 #include <chrono>
+#include <iostream>
 
 #define _USE_MATH_DEFINES	// math.hのM_PIを使うため
 #include <math.h>			// 角度計算用
@@ -99,8 +100,6 @@ void DrawObject( int mark_id, double patt_trans[3][4] );
 //=======================================================
 int main( int argc, char **argv )
 {
-	// gsimulatorの初期化
-	gsimulator.changeState(380, 250, 30, 30);
 
 	// GLUTの初期化
 	glutInit( &argc, argv );
@@ -197,6 +196,15 @@ void MainLoop(void)
 		exit(0);
 	}
 	gfield.receiveData(marker_num, marker_info);
+	if (gsimulator.ballIsMoving) {
+		double t;
+		auto now = std::chrono::system_clock::now();
+		auto elapsed = std::chrono::duration_cast< std::chrono::milliseconds >(now-start);
+		t = elapsed.count() / 1000.0;
+		std::cout << "now time is " << t << std::endl;
+		gsimulator.simulate(gfield, t);
+		gsimulator.print();
+	}
 
 	// 次の画像のキャプチャ指示
 	arVideoCapNext();
@@ -376,6 +384,8 @@ void KeyEvent( unsigned char key, int x, int y )
 	//Enterキーを入力したらボールを発射
 	if(key == 0x0D && !gsimulator.ballIsMoving){
 		gsimulator.shootBall(gfield);
+		std::cout << "simulate start" << std::endl;
+		start = std::chrono::system_clock::now();
 	}else if (key == 0x1b ){// ESCキーを入力したらアプリケーション終了
 		printf("*** %f (frame/sec)\n", (double)count/arUtilTimer());
 		Cleanup();

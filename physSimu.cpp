@@ -26,10 +26,11 @@ const Real ballStartV = 50;
 
 physSimu::physSimu() {
 	ballIsMoving = false;
+	circle.r = radius;
 }
 
 void physSimu::wallDetect() {
-	if (real(circle.p) + circle.r + 0.01 < width) {
+	if (real(circle.p) + circle.r + 0.01 > width) {
 		Line l;
 		l.first = Pt(width, 0); l.second = Pt(width, height);
 		Pt V = vertical(l);
@@ -39,7 +40,7 @@ void physSimu::wallDetect() {
 			return;
 		}
 	}
-	if (real(circle.p) + circle.r - 0.01 > 0) {
+	if (real(circle.p) + circle.r - 0.01 < 0) {
 		Line l;
 		l.first = Pt(0, 0); l.second = Pt(0, height);
 		Pt V = vertical(l);
@@ -49,7 +50,7 @@ void physSimu::wallDetect() {
 			return;
 		}
 	}
-	if (imag(circle.p) + circle.r + 0.01 < height) {
+	if (imag(circle.p) + circle.r + 0.01 > height) {
 		Line l;
 		l.first = Pt(0, height); l.second = Pt(width, height);
 		Pt V = vertical(l);
@@ -59,7 +60,7 @@ void physSimu::wallDetect() {
 			return;
 		}
 	}
-	if (imag(circle.p) + circle.r - 0.01 > 0) {
+	if (imag(circle.p) + circle.r - 0.01 < 0) {
 		Line l;
 		l.first = Pt(0, 0); l.second = Pt(width, 0);
 		Pt V = vertical(l);
@@ -120,7 +121,7 @@ void physSimu::simulate(const Field& field, Real t) {
 	// 任意のシミュレーションで行う処理:摩擦を受けて速度を微減させる
 	Real length = abs(v);
 	if (eq(length, 0)) return;
-	Real minus = min(damp, length);
+	Real minus = min(damp*dt, length);
 	v *= (length-minus) / length;
 }
 
@@ -139,6 +140,9 @@ void physSimu::shootBall(const Field& field){
 			v = (board.position[(4-board.dir)%4] - board.position[(4-board.dir+3)%4]) /  abs(board.position[0] - board.position[2]) * ballStartV;
 		}
 	}
+	t = 0;
+	ballIsMoving = true;
+	changeState(380, 250, 100, 100);
 }
 
 void physSimu::changeState(Real x, Real y, Real vx, Real vy) {
