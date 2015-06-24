@@ -135,7 +135,7 @@ void physSimu::shootBall(const Field& field){
 			Cir ball(ballStartPos,radius);
 			circle = ball;
 			//マーカの縦方向でのワールド座標系での単位ベクトルに初期速さをかけて初期速度に
-			v = (board.position[0] - board.position[2]) /  abs(board.position[0] - board.position[2]) * ballStartV;
+			v = (board.position[(4-board.dir)%4] - board.position[(4-board.dir+3)%4]) /  abs(board.position[0] - board.position[2]) * ballStartV;
 		}
 	}
 }

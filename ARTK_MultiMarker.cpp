@@ -55,15 +55,15 @@ ARParam cparam;										// カメラパラメータ
 //-----
 #define MARK1_MARK_ID	1						// マーカーID
 #define MARK1_PATT_NAME	"Data\\multi\\patt.a"		// パターンファイル名
-#define MARK1_SIZE		80.0					// パターンの幅（80mm）
+#define MARK1_SIZE		40.0					// パターンの幅（40mm）
 //-----
 #define MARK2_MARK_ID	2						// マーカーID
 #define MARK2_PATT_NAME	"Data\\multi\\patt.b"	// パターンファイル名
-#define MARK2_SIZE		80.0					// パターンの幅（80mm）
+#define MARK2_SIZE		40.0					// パターンの幅（40mm）
 //-----
 #define MARK3_MARK_ID	3						// マーカーID
 #define MARK3_PATT_NAME	"Data\\multi\\patt.c"		// パターンファイル名
-#define MARK3_SIZE		80.0					// パターンの幅（80mm）
+#define MARK3_SIZE		40.0					// パターンの幅（40mm）
 //-----
 typedef struct {
 	char   *patt_name;			// パターンファイル
@@ -177,7 +177,6 @@ void MainLoop(void)
 	ARUint8          *image;			// カメラキャプチャ画像
 	ARMarkerInfo     *marker_info;		// マーカ情報
 	int              marker_num;		// 検出されたマーカの数
-	int              i, j, k;
 
 	// フィールドの初期化
 	gfield.clear();
@@ -208,6 +207,8 @@ void MainLoop(void)
 	glClearDepth(1.0);					// デプスバッファの消去値
 	glClear( GL_DEPTH_BUFFER_BIT );		// デプスバッファの初期化
 
+	//このままでは同種複数マーカーに描画できないので注意
+
 	// マーカの一致度の比較
 	//for( i=0; i<marker_num; i++ ){
 	//	k = -1;
@@ -237,9 +238,8 @@ void MainLoop(void)
 	//		// 3Dオブジェクトの描画
 	//		//DrawObject( marker[i].mark_id, marker[i].patt_trans );
 	//	}
-
-		// バッファの内容を画面に表示
-		argSwapBuffers();
+	// バッファの内容を画面に表示
+	argSwapBuffers();
 }
 
 
@@ -260,45 +260,45 @@ void DrawObject( int mark_id, double patt_trans[3][4] )
 	glLoadMatrixd( gl_para );				// 読み込む行列を指定
 
 	switch( mark_id ){
-		case MARK1_MARK_ID:
-			// ライティング
-			SetupLighting1();			// ライトの定義
-			glEnable( GL_LIGHTING );	// ライティング・有効
-			glEnable( GL_LIGHT0 );		// ライト0・オン
-			// オブジェクトの材質
-			SetupMaterial1();
+	case MARK1_MARK_ID:
+		// ライティング
+		SetupLighting1();			// ライトの定義
+		glEnable( GL_LIGHTING );	// ライティング・有効
+		glEnable( GL_LIGHT0 );		// ライト0・オン
+		// オブジェクトの材質
+		SetupMaterial1();
 
-			// 3Dオブジェクトの描画
-			glTranslatef( 0.0, 0.0, 25.0 );	// マーカの上に載せるためにZ方向（マーカ上方）に25.0[mm]移動
-			glutSolidCube( 150.0 );			// ソリッドキューブを描画（1辺のサイズ50[mm]）
-			break;
+		// 3Dオブジェクトの描画
+		glTranslatef( 0.0, 0.0, 25.0 );	// マーカの上に載せるためにZ方向（マーカ上方）に25.0[mm]移動
+		glutSolidCube( 150.0 );			// ソリッドキューブを描画（1辺のサイズ50[mm]）
+		break;
 
-		case MARK2_MARK_ID:
-			// ライティング
-			SetupLighting2();			// ライトの定義
-			glEnable( GL_LIGHTING );	// ライティング・有効
-			glEnable( GL_LIGHT0 );		// ライト0・オン
-			// オブジェクトの材質
-			SetupMaterial2();
+	case MARK2_MARK_ID:
+		// ライティング
+		SetupLighting2();			// ライトの定義
+		glEnable( GL_LIGHTING );	// ライティング・有効
+		glEnable( GL_LIGHT0 );		// ライト0・オン
+		// オブジェクトの材質
+		SetupMaterial2();
 
-			// 3Dオブジェクトの描画
-			glTranslatef( 0.0, 0.0, 25.0 );		// マーカの上に載せるためにZ方向（マーカ上方）に25.0[mm]移動
-			glutSolidSphere( 50.0, 10, 10 );	// ソリッドスフィアを描画（1辺のサイズ50[mm]）
-			break;
+		// 3Dオブジェクトの描画
+		glTranslatef( 0.0, 0.0, 25.0 );		// マーカの上に載せるためにZ方向（マーカ上方）に25.0[mm]移動
+		glutSolidSphere( 50.0, 10, 10 );	// ソリッドスフィアを描画（1辺のサイズ50[mm]）
+		break;
 
-		case MARK3_MARK_ID:
-			// ライティング
-			SetupLighting1();			// ライトの定義
-			glEnable( GL_LIGHTING );	// ライティング・有効
-			glEnable( GL_LIGHT0 );		// ライト0・オン
-			// オブジェクトの材質
-			SetupMaterial2();
+	case MARK3_MARK_ID:
+		// ライティング
+		SetupLighting1();			// ライトの定義
+		glEnable( GL_LIGHTING );	// ライティング・有効
+		glEnable( GL_LIGHT0 );		// ライト0・オン
+		// オブジェクトの材質
+		SetupMaterial2();
 
-			// 3Dオブジェクトの描画
-			glTranslatef( 0.0, 0.0, 25.0 );	// マーカの上に載せるためにZ方向（マーカ上方）に25.0[mm]移動
-			glRotated( 90, 1.0, 0.0, 0.0);	// ティーポットをマーカ上に載せるために90°回転
-			glutSolidTeapot( 50.0 );		// ソリッドティーポットを描画（サイズ50[mm]）
-			break;
+		// 3Dオブジェクトの描画
+		glTranslatef( 0.0, 0.0, 25.0 );	// マーカの上に載せるためにZ方向（マーカ上方）に25.0[mm]移動
+		glRotated( 90, 1.0, 0.0, 0.0);	// ティーポットをマーカ上に載せるために90°回転
+		glutSolidTeapot( 50.0 );		// ソリッドティーポットを描画（サイズ50[mm]）
+		break;
 	}
 
 
