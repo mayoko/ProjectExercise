@@ -1,5 +1,6 @@
 #pragma once
 #include "geometry.h"
+#include "Mat.h"
 #include <vector>
 #include <map>
 #include <AR/config.h>
@@ -32,11 +33,14 @@ public:
 		Poly position;
 	};
 	std::vector<Board> boards;
+	// カメラ変換行列
+	Mat H_cw;
+	Field();
 	// ARToolKitのidとBoardクラスのidのすり合わせ
 	// trans[patt_id] = AR内部でpatt_idと解釈されるのがBoardではどのidになるか
 	std::map<int, int> trans;
 	// カメラから受け取った情報でFieldを構成する
 	void receiveData(int marker_num, ARMarkerInfo* marker_info);
+	// 情報をすべてなしにする(毎周期呼び出す)
 	void clear();
-	Field(void);
 };

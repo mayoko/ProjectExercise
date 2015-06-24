@@ -7,5 +7,7 @@ public:
 	Mat(int n, int m);
 	~Mat(void);
 	std::vector<std::vector<double> > mat;
-	Mat mul(const Mat& A);
+	void resize(int n, int m);
 };
+
+Mat mul(const Mat& A, const Mat& B);
