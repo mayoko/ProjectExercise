@@ -41,6 +41,9 @@ Field gfield;
 // ボール
 physSimu gsimulator;
 
+//ボールを発射したか否か
+static bool ballIsMoving  = false; 
+
 /* カメラパラメータ */
 char *cparam_name = "Data/calib_params_0610.dat";			// カメラパラメータファイル
 ARParam cparam;										// カメラパラメータ
@@ -76,11 +79,6 @@ MARK_T   marker[MARK_NUM] = {
 	{MARK2_PATT_NAME, -1, MARK2_MARK_ID, 0, MARK2_SIZE, {0.0, 0.0}},
 	{MARK3_PATT_NAME, -1, MARK3_MARK_ID, 0, MARK3_SIZE, {0.0, 0.0}}
 };
-
-//ボールを発射したか否か
-static bool ballIsMoving  = false; 
-//
-physSimu simu;
 
 // プロトタイプ宣言
 void Init(void);
@@ -376,7 +374,7 @@ void KeyEvent( unsigned char key, int x, int y )
 	//Enterキーを入力したらボールを発射
 	if(key == 0x0D && !ballIsMoving){
 		ballIsMoving = true;
-		simu.shootBall(gfield);
+		gsimulator.shootBall(gfield);
 	}else if (key == 0x1b ){// ESCキーを入力したらアプリケーション終了
 		printf("*** %f (frame/sec)\n", (double)count/arUtilTimer());
 		Cleanup();
