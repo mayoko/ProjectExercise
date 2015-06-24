@@ -70,11 +70,13 @@
     <ClCompile Include="ARTK_MultiMarker.cpp" />
     <ClCompile Include="field.cpp" />
     <ClCompile Include="geometry.cpp" />
+    <ClCompile Include="Mat.cpp" />
     <ClCompile Include="physSimu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="field.h" />
     <ClInclude Include="geometry.h" />
+    <ClInclude Include="Mat.h" />
     <ClInclude Include="physSimu.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
