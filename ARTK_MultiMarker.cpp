@@ -52,15 +52,15 @@ ARParam cparam;										// カメラパラメータ
 //-----
 #define MARK1_MARK_ID	1						// マーカーID
 #define MARK1_PATT_NAME	"Data\\multi\\patt.a"		// パターンファイル名
-#define MARK1_SIZE		80.0					// パターンの幅（80mm）
+#define MARK1_SIZE		40.0					// パターンの幅（40mm）
 //-----
 #define MARK2_MARK_ID	2						// マーカーID
 #define MARK2_PATT_NAME	"Data\\multi\\patt.b"	// パターンファイル名
-#define MARK2_SIZE		80.0					// パターンの幅（80mm）
+#define MARK2_SIZE		40.0					// パターンの幅（40mm）
 //-----
 #define MARK3_MARK_ID	3						// マーカーID
 #define MARK3_PATT_NAME	"Data\\multi\\patt.c"		// パターンファイル名
-#define MARK3_SIZE		80.0					// パターンの幅（80mm）
+#define MARK3_SIZE		40.0					// パターンの幅（40mm）
 //-----
 typedef struct {
 	char   *patt_name;			// パターンファイル
@@ -202,9 +202,11 @@ void MainLoop(void)
 	argDraw3dCamera( 0, 0 );
 	glClearDepth(1.0);					// デプスバッファの消去値
 	glClear( GL_DEPTH_BUFFER_BIT );		// デプスバッファの初期化
+	
+	//このままでは同種複数マーカーに描画できないので注意
 
 	// マーカの一致度の比較
-	for( i=0; i<marker_num; i++ ){
+	for( i=0; i<MARK_NUM; i++ ){
 		k = -1;
 		for( j=0; j<marker_num; j++ ){
 			if( marker[i].patt_id == marker_info[j].id ){
@@ -230,9 +232,9 @@ void MainLoop(void)
 			marker[i].visible = 1;
 
 			// 3Dオブジェクトの描画
-			//DrawObject( marker[i].mark_id, marker[i].patt_trans );
+			DrawObject( marker[i].mark_id, marker[i].patt_trans );
 		}
-
+		
 		// バッファの内容を画面に表示
 		argSwapBuffers();
 }
