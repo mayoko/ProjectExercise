@@ -8,12 +8,12 @@
 using namespace std;
 
 const int dx[4] = {1, 0, -1, 0};
-const int dy[4] = {0, 1, 0, -1};
+const int dy[4] = {0, -1, 0, 1};
 
 // 減衰項
 const Real damp = 5;
 // 矢印パネルでの加速項
-const Real cdAccel = 5;
+const Real cdAccel = 3000;
 // フィールドの幅
 const Real width = 782;
 // フィールドの高さ
@@ -114,7 +114,7 @@ void physSimu::simulate(const Field& field, Real t) {
 		} else if (id == Field::Board::CHANGE_DIRECTION) {
 			if (contains(board.position, circle.p) == GEOMETRY_IN) {
 				// 矢印の向きに応じて速度を変化させる
-				v += cdAccel*dt*Pt(dx[board.dir], dy[board.dir]);
+				v += cdAccel*dt*Pt(dx[(board.dir+3)%4], dy[(board.dir+3)%4]);
 			}
 		//} else if(id == Field::Board::HOLE){
 		//	if (contains(board.position, circle.p) == GEOMETRY_IN) {
