@@ -125,7 +125,7 @@ void display(void)
 	//GLfloat color[4] = {0.0, 0.8, 0.7, 1.0};//球の色指定
 	glClearColor(0, 0, 0, 0); //背景の色指定
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
+
 	const double x = real(gsimulator.circle.p)/782*2-1.;
 	const double y = imag(gsimulator.circle.p)/530*2-1.;
 
@@ -142,13 +142,15 @@ void display(void)
 		glVertex2d(X, Y);
 	}
 	glEnd();
-	glBegin(GL_LINE_LOOP);
-	glVertex2d(-0.9, -0.9);
-	glVertex2d(0.9, -0.9);
-	glVertex2d(0.9, 0.9);
-	glVertex2d(-0.9, 0.9);
-	glEnd();
-	glutSwapBuffers();
+	for (Field::Board board : gfield.boards) {
+		glBegin(GL_POLYGON);
+		for (int i = 0; i < 4; i++) {
+			double X = real(board.position[i])/782*2-1;
+			double Y = -(imag(board.position[i])/530*2-1);
+			glVertex2d(X, Y);
+		}
+		glEnd();
+	}
 	//glFlush();
 }
 
