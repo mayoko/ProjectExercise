@@ -19,7 +19,11 @@ public:
 	//ボールを発射するための処理
 	void shootBall(const Field& field);
 	//ボールを発射したか否か
-	bool ballIsMoving; 
+	bool ballIsMoving;
+	//穴に落ちたらボールを消す処理
+	void fallIntoHole(const Field&);
+	//ゴール処理
+	void arrivedAtGoal(const Field&);
 	// ボールの運動を記述する(デバッグ用)
 	void print() const ;
 };

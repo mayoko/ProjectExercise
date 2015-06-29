@@ -116,6 +116,16 @@ void physSimu::simulate(const Field& field, Real t) {
 				// 矢印の向きに応じて速度を変化させる
 				v += cdAccel*dt*Pt(dx[board.dir], dy[board.dir]);
 			}
+		} else if(id == Field::Board::HOLE){
+			if (contains(board.position, circle.p) == GEOMETRY_IN) {
+				//落ちたらボール消える
+				fallIntoHole(field);
+			}
+		} else if(id == Field::Board::GOAL){
+			if (contains(board.position, circle.p) == GEOMETRY_IN) {
+				//ゴールに到達
+				arrivedAtGoal(field);
+			}
 		}
 	}
 	// 任意のシミュレーションで行う処理:摩擦を受けて速度を微減させる
@@ -143,6 +153,18 @@ void physSimu::shootBall(const Field& field){
 	t = 0;
 	ballIsMoving = true;
 	changeState(380, 250, 100, 100);
+}
+
+void physSimu::fallIntoHole(const Field& field){
+	v = 0;
+	ballIsMoving = false;	
+	std::cout << "GOAL!!!!!" << std::endl;
+}
+
+void physSimu::arrivedAtGoal(const Field& field){
+	v = 0;
+	ballIsMoving = false;
+	std::cout << "GOAL!!!!!" << std::endl;
 }
 
 void physSimu::changeState(Real x, Real y, Real vx, Real vy) {
