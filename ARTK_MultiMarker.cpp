@@ -37,6 +37,7 @@ int  ysize;											// ウィンドウサイズ
 int  thresh = 100;									// 2値化の閾値
 int  count = 0;										// 処理フレーム数
 int startFlag = 0;                                  // スタートフラグ
+int winID[2];                                       // ウィンドウのID
 
 // フィールド
 Field gfield;
@@ -117,6 +118,46 @@ int main( int argc, char **argv )
 	return 0;
 }
 
+void display(void)
+{
+	std::cout << "unko" << std::endl;
+	//GLfloat color[4] = {0.0, 0.8, 0.7, 1.0};//球の色指定
+	glClearColor(0, 0, 0, 0); //背景の色指定
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
+	const double x = real(gsimulator.circle.p)/782*2-1.;
+	const double y = imag(gsimulator.circle.p)/530*2-1.;
+
+	std::cout << x << " " << y <<  std::endl;
+
+	glDisable(GL_TEXTURE_2D);
+	glLoadIdentity();
+	glColor3d(1.0, 0, 0);
+	glPointSize(15);
+	glBegin(GL_POINT);
+	glVertex2d(x, y);
+	glEnd();
+	glBegin(GL_LINE_LOOP);
+	glVertex2d(-0.9, -0.9);
+	glVertex2d(0.9, -0.9);
+	glVertex2d(0.9, 0.9);
+	glVertex2d(-0.9, 0.9);
+	glEnd();
+	glutSwapBuffers();
+	//glFlush();
+}
+
+
+
+void reshape(int w, int h)
+{
+	glViewport(0, 0, (GLsizei)w, (GLsizei)h);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	//gluPerspective(30.0, (double)w / (double)h, 1.0, 800.0);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+}
 
 //=======================================================
 // 初期化関数
@@ -165,6 +206,14 @@ void Init(void)
 
 	// ウィンドウタイトルの設定
 	glutSetWindowTitle("ARTK_basic");
+	winID[0] = glutGetWindow();
+	glutInitDisplayMode(GLUT_RGBA| GLUT_DOUBLE|GLUT_DEPTH);
+	glutInitWindowSize(640,480);
+	winID[1] = glutCreateWindow("ojisan");
+	glutSetWindow(winID[1]);
+	glutDisplayFunc(display);
+	glutReshapeFunc(reshape);
+	glutSetWindow(winID[0]);
 }
 
 
@@ -254,6 +303,9 @@ void MainLoop(void)
 	//	}
 	// バッファの内容を画面に表示
 	argSwapBuffers();
+	glutSetWindow(winID[1]);
+	glutPostRedisplay();
+	glutSetWindow(winID[0]);
 }
 
 
