@@ -40,7 +40,7 @@ void physSimu::wallDetect() {
 			return;
 		}
 	}
-	if (real(circle.p) + circle.r - 0.01 < 0) {
+	if (real(circle.p) - circle.r - 0.01 < 0) {
 		Line l;
 		l.first = Pt(0, 0); l.second = Pt(0, height);
 		Pt V = vertical(l);
@@ -60,7 +60,7 @@ void physSimu::wallDetect() {
 			return;
 		}
 	}
-	if (imag(circle.p) + circle.r - 0.01 < 0) {
+	if (imag(circle.p) - circle.r - 0.01 < 0) {
 		Line l;
 		l.first = Pt(0, 0); l.second = Pt(width, 0);
 		Pt V = vertical(l);
