@@ -158,7 +158,7 @@ void physSimu::shootBall(const Field& field){
 void physSimu::fallIntoHole(const Field& field){
 	v = 0;
 	ballIsMoving = false;	
-	std::cout << "GOAL!!!!!" << std::endl;
+	std::cout << "GAME OVER..." << std::endl;
 }
 
 void physSimu::arrivedAtGoal(const Field& field){
