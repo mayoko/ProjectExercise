@@ -16,6 +16,7 @@
 #include <map>
 #include <chrono>
 #include <iostream>
+#include <cmath>
 
 #define _USE_MATH_DEFINES	// math.hのM_PIを使うため
 #include <math.h>			// 角度計算用
@@ -134,8 +135,12 @@ void display(void)
 	glLoadIdentity();
 	glColor3d(1.0, 0, 0);
 	glPointSize(15);
-	glBegin(GL_POINT);
-	glVertex2d(x, y);
+	glBegin(GL_POLYGON);
+	for (int i = 0; i < 32; i++) {
+		double X = x+0.1*std::cos(2*M_PI*i/32);
+		double Y = -(y+0.1*std::sin(2*M_PI*i/32));
+		glVertex2d(X, Y);
+	}
 	glEnd();
 	glBegin(GL_LINE_LOOP);
 	glVertex2d(-0.9, -0.9);

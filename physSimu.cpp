@@ -22,7 +22,7 @@ const Real height = 530;
 //ボールの半径
 const Real radius = 10;
 //ボールの初期速さ
-const Real ballStartV = 50;
+const Real ballStartV = 100;
 
 physSimu::physSimu() {
 	ballIsMoving = false;
