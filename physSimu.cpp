@@ -136,23 +136,25 @@ void physSimu::simulate(const Field& field, Real t) {
 }
 
 void physSimu::shootBall(const Field& field){
+	cout << "shoot Ball" << endl;
 	// firldにおかれている各オブジェクトのなかでスタート用パネルを探し、処理する
 	int n = field.boards.size();
 	for (Field::Board board : field.boards) {
 		int id = board.id;
+		cout << id << endl;
 		if (id == Field::Board::START) {
+			cout << "detect START" << endl;
 			//4頂点の重心が中心座標
 			Pt ballStartPos = (board.position[0] +board.position[1] +board.position[2] +board.position[3]) / 4.0;
 			Cir ball(ballStartPos,radius);
 			circle = ball;
 			//マーカの縦方向でのワールド座標系での単位ベクトルに初期速さをかけて初期速度に
 			//(4-board.dir)%4で常に左上になるらしい。そして順番は時計回りらしい。
-			v = (board.position[(4-board.dir)%4] - board.position[(4-board.dir+3)%4]) /  abs(board.position[0] - board.position[2]) * ballStartV;
+			v = (board.position[(3-board.dir)%4] - board.position[(3-board.dir+3)%4]) /  abs(board.position[0] - board.position[1]) * ballStartV;
 		}
 	}
 	t = 0;
 	ballIsMoving = true;
-	changeState(380, 250, 100, 100);
 }
 
 void physSimu::fallIntoHole(const Field& field){

@@ -33,6 +33,8 @@ public:
 		int dir;
 		// 各頂点の位置
 		Poly position;
+		// デバッグ用　Boardの情報を記載する
+		void print() const;
 	};
 	std::vector<Board> boards;
 	// カメラ変換行列

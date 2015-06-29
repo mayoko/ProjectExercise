@@ -36,6 +36,7 @@ int  xsize;											// ウィンドウサイズ
 int  ysize;											// ウィンドウサイズ
 int  thresh = 100;									// 2値化の閾値
 int  count = 0;										// 処理フレーム数
+int startFlag = 0;                                  // スタートフラグ
 
 // フィールド
 Field gfield;
@@ -56,15 +57,15 @@ ARParam cparam;										// カメラパラメータ
 //-----
 #define MARK1_MARK_ID	1						// マーカーID
 #define MARK1_PATT_NAME	"Data\\patt.wall"		// パターンファイル名
-#define MARK1_SIZE		40.0					// パターンの幅（40mm）
+#define MARK1_SIZE		60.0					// パターンの幅（40mm）
 //-----
 #define MARK2_MARK_ID	2						// マーカーID
 #define MARK2_PATT_NAME	"Data\\patt.cd "	// パターンファイル名
-#define MARK2_SIZE		40.0					// パターンの幅（40mm）
+#define MARK2_SIZE		60.0					// パターンの幅（40mm）
 //-----
 #define MARK3_MARK_ID	3						// マーカーID
 #define MARK3_PATT_NAME	"Data\\patt.start"		// パターンファイル名
-#define MARK3_SIZE		40.0					// パターンの幅（40mm）
+#define MARK3_SIZE		60.0					// パターンの幅（40mm）
 //-----
 typedef struct {
 	char   *patt_name;			// パターンファイル
@@ -152,12 +153,11 @@ void Init(void)
 	// パターンファイルのロード
 	for( int i=0; i<Field::Board::EFFECT_NUM; i++ ){
 		if( (marker[i].patt_id = arLoadPatt(marker[i].patt_name)) < 0){
-			gfield.trans.insert(std::pair<int, int>(marker[i].patt_id, i));
 			printf("パターンファイルの読み込みに失敗しました\n");
 			printf("%s\n", marker[i].patt_name);
-			while(1);
 			exit(0);
 		}
+		gfield.trans.insert(std::pair<int, int>(marker[i].patt_id, i));
 	}
 
 	// gsubライブラリの初期化
@@ -196,6 +196,12 @@ void MainLoop(void)
 		exit(0);
 	}
 	gfield.receiveData(marker_num, marker_info);
+	if (startFlag == 1) {
+		std::cout << "simulate start" << std::endl;
+		gsimulator.shootBall(gfield);
+		start = std::chrono::system_clock::now();
+		startFlag = 2;
+	}
 	if (gsimulator.ballIsMoving) {
 		double t;
 		auto now = std::chrono::system_clock::now();
@@ -383,9 +389,7 @@ void KeyEvent( unsigned char key, int x, int y )
 {
 	//Enterキーを入力したらボールを発射
 	if(key == 0x0D && !gsimulator.ballIsMoving){
-		gsimulator.shootBall(gfield);
-		std::cout << "simulate start" << std::endl;
-		start = std::chrono::system_clock::now();
+		startFlag = 1;
 	}else if (key == 0x1b ){// ESCキーを入力したらアプリケーション終了
 		printf("*** %f (frame/sec)\n", (double)count/arUtilTimer());
 		Cleanup();
