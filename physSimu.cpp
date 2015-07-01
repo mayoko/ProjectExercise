@@ -21,8 +21,6 @@ const Real height = 530;
 
 //ボールの半径
 const Real radius = 25;
-//ボールの初期速さ
-const Real ballStartV = 100;
 
 physSimu::physSimu() {
 	ballIsMoving = false;
@@ -138,7 +136,7 @@ void physSimu::simulate(const Field& field, Real t) {
 	v *= 0.994;
 }
 
-void physSimu::shootBall(const Field& field){
+void physSimu::shootBall(const Field& field, const Real& startV){
 	cout << "shoot Ball" << endl;
 	// firldにおかれている各オブジェクトのなかでスタート用パネルを探し、処理する
 	int n = field.boards.size();
@@ -153,7 +151,7 @@ void physSimu::shootBall(const Field& field){
 			circle = ball;
 			//マーカの縦方向でのワールド座標系での単位ベクトルに初期速さをかけて初期速度に
 			//(4-board.dir)%4で常に左上になるらしい。そして順番は時計回りらしい。
-			v = (board.position[(3-board.dir)%4] - board.position[(3-board.dir+3)%4]) /  abs(board.position[0] - board.position[1]) * ballStartV;
+			v = (board.position[(3-board.dir)%4] - board.position[(3-board.dir+3)%4]) /  abs(board.position[0] - board.position[1]) * startV;
 		}
 	}
 	t = 0;

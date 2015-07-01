@@ -17,7 +17,7 @@ public:
 	// Fieldおよび時間を読み込んだとき,ボールの運動を規定する
 	void simulate(const Field& field, Real t);
 	//ボールを発射するための処理
-	void shootBall(const Field& field);
+	void shootBall(const Field& field, const Real& startV);
 	//ボールを発射したか否か
 	bool ballIsMoving;
 	//穴に落ちたらボールを消す処理

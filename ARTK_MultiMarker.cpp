@@ -39,6 +39,7 @@ int  thresh = 100;									// 2値化の閾値
 int  count = 0;										// 処理フレーム数
 int startFlag = 0;                                  // スタートフラグ
 int winID[2];                                       // ウィンドウのID
+double gstartV;                                        // 初期速度
 
 // フィールド
 Field gfield;
@@ -264,7 +265,7 @@ void MainLoop(void)
 	gfield.receiveData(marker_num, marker_info);
 	if (startFlag == 1) {
 		std::cout << "simulate start" << std::endl;
-		gsimulator.shootBall(gfield);
+		gsimulator.shootBall(gfield, gstartV);
 		start = std::chrono::system_clock::now();
 		startFlag = 2;
 	}
@@ -457,6 +458,9 @@ void SetupMaterial2(void)
 void KeyEvent( unsigned char key, int x, int y )
 {
 	//Enterキーを入力したらボールを発射
+	if (48 <= key && key <= 57) {
+		gstartV = (key - 48) * 30.;
+	}
 	if(key == 0x0D /*&& !gsimulator.ballIsMoving*/){
 		startFlag = 1;
 	}else if (key == 0x1b ){// ESCキーを入力したらアプリケーション終了
