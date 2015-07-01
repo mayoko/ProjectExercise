@@ -35,7 +35,7 @@
 char *vconf_name  = "Data/WDM_camera_flipV.xml";	// ビデオデバイスの設定ファイル
 int  xsize;											// ウィンドウサイズ
 int  ysize;											// ウィンドウサイズ
-int  thresh = 100;									// 2値化の閾値
+int  thresh = 70;									// 2値化の閾値
 int  count = 0;										// 処理フレーム数
 int startFlag = 0;                                  // スタートフラグ
 int winID[2];                                       // ウィンドウのID
@@ -156,6 +156,31 @@ void display(void)
 		glEnd();
 	}
 	for (Field::Board board : gfield.boards) {
+		switch(board.id) {
+		case Field::Board::OBSTACLE:
+			// 緑
+			glColor3d(0, 1.0, 0);
+			break;
+		case Field::Board::CHANGE_DIRECTION:
+			// 青
+			glColor3d(0, 0, 1.0);
+			break;
+		case Field::Board::START:
+			// 黄色
+			glColor3d(1.0, 1.0, 0);
+			break;
+		case Field::Board::HOLE:
+			// 紫
+			glColor3d(1.0, 0, 1.0);
+			break;
+		case Field::Board::GOAL:
+			// 水色
+			glColor3d(0, 1.0, 1.0);
+			break;
+		default:
+			std::cout << "unko" << std::endl;
+			break;
+		}
 		glBegin(GL_POLYGON);
 		for (int i = 0; i < 4; i++) {
 			double X = real(board.position[i])/782*2-1;
@@ -226,9 +251,10 @@ void Init(void)
 
 	// ウィンドウタイトルの設定
 	glutSetWindowTitle("ARTK_basic");
+	//glutInitWindowPosition(1366, 0);
 	winID[0] = glutGetWindow();
 	glutInitDisplayMode(GLUT_RGBA| GLUT_DOUBLE|GLUT_DEPTH);
-	glutInitWindowSize(640,480);
+	glutInitWindowSize(1280, 800);
 	winID[1] = glutCreateWindow("ojisan");
 	glutSetWindow(winID[1]);
 	glutDisplayFunc(display);
