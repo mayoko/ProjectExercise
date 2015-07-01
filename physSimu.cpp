@@ -20,7 +20,7 @@ const Real width = 782;
 const Real height = 530;
 
 //ボールの半径
-const Real radius = 10;
+const Real radius = 25;
 //ボールの初期速さ
 const Real ballStartV = 100;
 
@@ -115,8 +115,9 @@ void physSimu::simulate(const Field& field, Real t) {
 			if (contains(board.position, circle.p) == GEOMETRY_IN) {
 				// 矢印の向きに応じて速度を変化させる
 
-				//v += cdAccel*dt*Pt(dx[(board.dir-1)%4], dy[(board.dir-1)%4]);
 				v += cdAccel*dt*(board.position[(4-board.dir)%4] - board.position[(7-board.dir)%4]) /  abs(board.position[0] - board.position[1]);
+				// 単純に向きを変えるだけ
+				//v = abs(v) * (board.position[(4-board.dir)%4] - board.position[(7-board.dir)%4]) /  abs(board.position[0] - board.position[1]);
 			}
 		//} else if(id == Field::Board::HOLE){
 		//	if (contains(board.position, circle.p) == GEOMETRY_IN) {
@@ -134,8 +135,7 @@ void physSimu::simulate(const Field& field, Real t) {
 	// 任意のシミュレーションで行う処理:摩擦を受けて速度を微減させる
 	Real length = abs(v);
 	if (eq(length, 0)) return;
-	Real minus = min(damp*dt, length);
-	v *= (length-minus) / length;
+	v *= 0.994;
 }
 
 void physSimu::shootBall(const Field& field){

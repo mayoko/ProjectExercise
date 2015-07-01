@@ -121,7 +121,6 @@ int main( int argc, char **argv )
 
 void display(void)
 {
-	std::cout << "unko" << std::endl;
 	//GLfloat color[4] = {0.0, 0.8, 0.7, 1.0};//球の色指定
 	glClearColor(0, 0, 0, 0); //背景の色指定
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -137,8 +136,8 @@ void display(void)
 	glPointSize(15);
 	glBegin(GL_POLYGON);
 	for (int i = 0; i < 32; i++) {
-		double X = x+0.1*std::cos(2*M_PI*i/32);
-		double Y = -(y+0.1*std::sin(2*M_PI*i/32));
+		double X = x+gsimulator.circle.r/782*2*std::cos(2*M_PI*i/32);
+		double Y = -(y+gsimulator.circle.r/530*2*std::sin(2*M_PI*i/32));
 		glVertex2d(X, Y);
 	}
 	glEnd();
@@ -447,7 +446,7 @@ void SetupMaterial2(void)
 void KeyEvent( unsigned char key, int x, int y )
 {
 	//Enterキーを入力したらボールを発射
-	if(key == 0x0D && !gsimulator.ballIsMoving){
+	if(key == 0x0D /*&& !gsimulator.ballIsMoving*/){
 		startFlag = 1;
 	}else if (key == 0x1b ){// ESCキーを入力したらアプリケーション終了
 		printf("*** %f (frame/sec)\n", (double)count/arUtilTimer());
