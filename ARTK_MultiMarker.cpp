@@ -137,8 +137,8 @@ void display(void)
 	glClearColor(1.0, 1.0, 1.0, 0); // îwåiêF
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	const double x = real(gsimulator.circle.p)/782*2-1.;
-	const double y = imag(gsimulator.circle.p)/530*2-1.;
+	const double x = real(gsimulator.circle.p)/800*2-1.;
+	const double y = imag(gsimulator.circle.p)/600*2-1.;
 
 	std::cout << x << " " << y <<  std::endl;
 
@@ -149,8 +149,8 @@ void display(void)
 	if (gsimulator.ballIsMoving) {
 		glBegin(GL_POLYGON);
 		for (int i = 0; i < 32; i++) {
-			double X = x+gsimulator.circle.r/782*2*std::cos(2*M_PI*i/32);
-			double Y = -(y+gsimulator.circle.r/530*2*std::sin(2*M_PI*i/32));
+			double X = x+gsimulator.circle.r/800*2*std::cos(2*M_PI*i/32);
+			double Y = -(y+gsimulator.circle.r/600*2*std::sin(2*M_PI*i/32));
 			glVertex2d(X, Y);
 		}
 		glEnd();
@@ -183,8 +183,8 @@ void display(void)
 		}
 		glBegin(GL_POLYGON);
 		for (int i = 0; i < 4; i++) {
-			double X = real(board.position[i])/782*2-1;
-			double Y = -(imag(board.position[i])/530*2-1);
+			double X = real(board.position[i])/800*2-1;
+			double Y = -(imag(board.position[i])/600*2-1);
 			glVertex2d(X, Y);
 		}
 		glEnd();
