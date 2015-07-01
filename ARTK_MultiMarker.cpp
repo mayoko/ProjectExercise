@@ -8,6 +8,7 @@
 
 #include "field.h"
 #include "physSimu.h"
+#include "Mat.h"
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,6 +18,7 @@
 #include <chrono>
 #include <iostream>
 #include <cmath>
+#include <fstream>
 
 #define _USE_MATH_DEFINES	// math.hのM_PIを使うため
 #include <math.h>			// 角度計算用
@@ -40,6 +42,9 @@ int  count = 0;										// 処理フレーム数
 int startFlag = 0;                                  // スタートフラグ
 int winID[2];                                       // ウィンドウのID
 double gstartV;                                        // 初期速度
+const int width = 1280;
+const int height = 800;
+Mat H_pc;
 
 // フィールド
 Field gfield;
@@ -131,14 +136,24 @@ int main( int argc, char **argv )
 	return 0;
 }
 
+void convert(double X, double Y) {
+	Mat vec(3, 1);
+	vec.mat[0][0] = X;
+	vec.mat[1][0] = Y;
+	vec.mat[2][0] = 1;
+	vec = mul(H_pc, vec);
+	glVertex2d(vec.mat[0][0], vec.mat[1][0]);
+}
+
 void display(void)
 {
+	glViewport(0, 0, width, height);
 	//GLfloat color[4] = {0.0, 0.8, 0.7, 1.0};//球の色指定
 	glClearColor(1.0, 1.0, 1.0, 0); // 背景色
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	const double x = real(gsimulator.circle.p)/800*2-1.;
-	const double y = imag(gsimulator.circle.p)/600*2-1.;
+	const double x = real(gsimulator.circle.p)/782*2-1.;
+	const double y = imag(gsimulator.circle.p)/530*2-1.;
 
 	std::cout << x << " " << y <<  std::endl;
 
@@ -149,13 +164,15 @@ void display(void)
 	if (gsimulator.ballIsMoving) {
 		glBegin(GL_POLYGON);
 		for (int i = 0; i < 32; i++) {
-			double X = x+gsimulator.circle.r/800*2*std::cos(2*M_PI*i/32);
-			double Y = -(y+gsimulator.circle.r/600*2*std::sin(2*M_PI*i/32));
+			double X = x+gsimulator.circle.r/782*2*std::cos(2*M_PI*i/32);
+			double Y = -(y+gsimulator.circle.r/530*2*std::sin(2*M_PI*i/32));
+			//convert(X, Y);
 			glVertex2d(X, Y);
 		}
 		glEnd();
 	}
 	for (Field::Board board : gfield.boards) {
+		std::cerr << "poi" << std::endl;
 		switch(board.id) {
 		case Field::Board::OBSTACLE:
 			// 緑
@@ -183,8 +200,9 @@ void display(void)
 		}
 		glBegin(GL_POLYGON);
 		for (int i = 0; i < 4; i++) {
-			double X = real(board.position[i])/800*2-1;
-			double Y = -(imag(board.position[i])/600*2-1);
+			double X = real(board.position[i])/782*2-1;
+			double Y = -(imag(board.position[i])/530*2-1);
+			//convert(X, Y);
 			glVertex2d(X, Y);
 		}
 		glEnd();
@@ -254,12 +272,24 @@ void Init(void)
 	//glutInitWindowPosition(1366, 0);
 	winID[0] = glutGetWindow();
 	glutInitDisplayMode(GLUT_RGBA| GLUT_DOUBLE|GLUT_DEPTH);
-	glutInitWindowSize(1280, 800);
+	glutInitWindowSize(width, height);
 	winID[1] = glutCreateWindow("ojisan");
 	glutSetWindow(winID[1]);
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
 	glutSetWindow(winID[0]);
+
+	// H_pc行列の初期化
+	H_pc.resize(3, 3);
+	std::ifstream ifs("Data/H_pc.txt");
+	for (int i = 0; i < 3; i++) for (int j = 0; j < 3; j++) ifs >> H_pc.mat[i][j];
+	std::cout << "initialize H_pc mat" << std::endl;
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			std::cout << H_pc.mat[i][j] << " ";
+		}
+		std::cout << std::endl;
+	}
 }
 
 

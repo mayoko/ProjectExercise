@@ -60,7 +60,7 @@ void Field::receiveData(int marker_num, ARMarkerInfo* marker_info) {
 	//認識したマーカーのidと座標
 	//TODO ほかのファイルとの整合性をあわせる
 	for(int  j=0; j<marker_num; j++ ){
-		if (marker_info[j].cf < 0.4) continue;
+		if (marker_info[j].cf < 0.495) continue;
 		Board new_board;
 		new_board.id = trans[marker_info[j].id];
 		new_board.dir = marker_info[j].dir;
