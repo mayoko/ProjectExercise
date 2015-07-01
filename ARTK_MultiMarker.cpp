@@ -146,13 +146,15 @@ void display(void)
 	glLoadIdentity();
 	glColor3d(1.0, 0, 0);
 	glPointSize(15);
-	glBegin(GL_POLYGON);
-	for (int i = 0; i < 32; i++) {
-		double X = x+gsimulator.circle.r/782*2*std::cos(2*M_PI*i/32);
-		double Y = -(y+gsimulator.circle.r/530*2*std::sin(2*M_PI*i/32));
-		glVertex2d(X, Y);
+	if (gsimulator.ballIsMoving) {
+		glBegin(GL_POLYGON);
+		for (int i = 0; i < 32; i++) {
+			double X = x+gsimulator.circle.r/782*2*std::cos(2*M_PI*i/32);
+			double Y = -(y+gsimulator.circle.r/530*2*std::sin(2*M_PI*i/32));
+			glVertex2d(X, Y);
+		}
+		glEnd();
 	}
-	glEnd();
 	for (Field::Board board : gfield.boards) {
 		glBegin(GL_POLYGON);
 		for (int i = 0; i < 4; i++) {

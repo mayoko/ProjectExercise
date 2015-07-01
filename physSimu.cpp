@@ -117,17 +117,16 @@ void physSimu::simulate(const Field& field, Real t) {
 				// 単純に向きを変えるだけ
 				//v = abs(v) * (board.position[(4-board.dir)%4] - board.position[(7-board.dir)%4]) /  abs(board.position[0] - board.position[1]);
 			}
-		//} else if(id == Field::Board::HOLE){
-		//	if (contains(board.position, circle.p) == GEOMETRY_IN) {
-		//		//落ちたらボール消える
-		//		fallIntoHole(field);
-		//	}
-		//} else if(id == Field::Board::GOAL){
-		//	if (contains(board.position, circle.p) == GEOMETRY_IN) {
-		//		//ゴールに到達
-		//		arrivedAtGoal(field);
-		//	}
-		//}
+		} else if(id == Field::Board::HOLE){
+			if (contains(board.position, circle.p) == GEOMETRY_IN) {
+				//落ちたらボール消える
+				fallIntoHole(field);
+			}
+		} else if(id == Field::Board::GOAL){
+			if (contains(board.position, circle.p) == GEOMETRY_IN) {
+				//ゴールに到達
+				arrivedAtGoal(field);
+			}
 		}
 	}
 	// 任意のシミュレーションで行う処理:摩擦を受けて速度を微減させる
