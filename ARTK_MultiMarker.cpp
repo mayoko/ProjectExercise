@@ -59,7 +59,7 @@ ARParam cparam;										// カメラパラメータ
 #define MARK_NUM		5					// 使用するマーカーの種類
 //-----
 #define MARK1_MARK_ID	1						// マーカーID
-#define MARK1_PATT_NAME	"Data\\patt.wall"		// パターンファイル名
+#define MARK1_PATT_NAME	"Data\\patt.wall2"		// パターンファイル名
 #define MARK1_SIZE		60.0					// パターンの幅（40mm）
 //-----
 #define MARK2_MARK_ID	2						// マーカーID
