@@ -21,6 +21,12 @@ void Field::Board::print() const {
 	case START:
 		cout << "START" << endl;
 		break;
+	case GOAL:
+		cout << "GOAL" << endl;
+		break;
+	case HOLE:
+		cout << "HOLE" << endl;
+		break;
 	default:
 		cout << "NONE" << endl;
 		break;
