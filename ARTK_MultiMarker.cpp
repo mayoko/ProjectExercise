@@ -134,7 +134,7 @@ int main( int argc, char **argv )
 void display(void)
 {
 	//GLfloat color[4] = {0.0, 0.8, 0.7, 1.0};//球の色指定
-	glClearColor(0, 0, 0, 0); //背景の色指定
+	glClearColor(1.0, 1.0, 1.0, 0); // 背景色
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	const double x = real(gsimulator.circle.p)/782*2-1.;
@@ -189,7 +189,7 @@ void display(void)
 		}
 		glEnd();
 	}
-	//glFlush();
+	glFlush();
 }
 
 
