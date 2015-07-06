@@ -45,6 +45,8 @@ double gstartV;                                        // 初期速度
 const int width = 1280;
 const int height = 800;
 Mat H_pc;
+double H_pw[9];
+bool Change = false;
 
 // フィールド
 Field gfield;
@@ -113,6 +115,7 @@ void KeyEvent( unsigned char key, int x, int y );
 void MouseEvent( int button, int state, int x, int y );
 void Cleanup(void);
 void DrawObject( int mark_id, double patt_trans[3][4] );
+void homography(double& u, double& v);
 
 
 //=======================================================
@@ -145,81 +148,145 @@ void convert(double X, double Y) {
 	glVertex2d(vec.mat[0][0], vec.mat[1][0]);
 }
 
+void homography(double &u, double &v)
+{ 
+	double w[3] = {u,v,1};
+	u = ((H_pw[0]*w[0])+(H_pw[1]*w[1])+(H_pw[2]*1))/((H_pw[6]*w[0])+(H_pw[7]*w[1])+(H_pw[8]*1));
+	v = ((H_pw[3]*w[0])+(H_pw[4]*w[1])+(H_pw[5]*1))/((H_pw[6]*w[0])+(H_pw[7]*w[1])+(H_pw[8]*1));
+}
+
+void fullscreen(){
+	int nMode = 0;
+	DEVMODE devMode;
+	HWND hWnd;
+	hWnd = GetActiveWindow();
+	if(Change){
+		glClearColor( 1.0f, 1.0f, 0.0f, 1.0f );
+		ChangeDisplaySettings( &devMode, CDS_FULLSCREEN );
+		glutFullScreen();
+	}else{
+		glClearColor( 0.0f, 1.0f, 0.0f, 1.0f );
+		ChangeDisplaySettings(NULL, 0);
+		glutPositionWindow(100,100);
+		glutReshapeWindow(1280,800);
+	}
+}
+
 void display(void)
 {
 	glViewport(0, 0, width, height);
-	//GLfloat color[4] = {0.0, 0.8, 0.7, 1.0};//球の色指定
-	glClearColor(1.0, 1.0, 1.0, 0); // 背景色
+	GLfloat color[4] = {0.0, 0.8, 0.7, 1.0};//球の色指定
+	glClearColor(1.0, 1.0, 1.0, 1.0); //背景の色指定
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
 
-	const double x = real(gsimulator.circle.p)/782*2-1.;
-	const double y = imag(gsimulator.circle.p)/530*2-1.;
+	//glViewport(-640,0,1280,800);
+	//glLoadIdentity();
+	//gluPerspective( 151.927 , 1280/800 ,0.01 , 100);
+	//gluLookAt(0.0, 0.0, 100.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);//視点
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
 
-	std::cout << x << " " << y <<  std::endl;
+	//u = 10.0 * count; v = 10.0*800.0/1280.0*count;
+	double u = real(gsimulator.circle.p);
+	double v = imag(gsimulator.circle.p);
 
-	glDisable(GL_TEXTURE_2D);
+	homography(u, v);
+	std::cout << u << " " << v << std::endl;
+	double x = (u/640.0-1.0)*(1280.0/800.0) ;
+	double y = (v/400.0-1.0)*(-1.0);
 	glLoadIdentity();
-	glColor3d(1.0, 0, 0);
-	glPointSize(15);
-	if (gsimulator.ballIsMoving) {
-		glBegin(GL_POLYGON);
-		for (int i = 0; i < 32; i++) {
-			double X = x+gsimulator.circle.r/782*2*std::cos(2*M_PI*i/32);
-			double Y = -(y+gsimulator.circle.r/530*2*std::sin(2*M_PI*i/32));
-			//convert(X, Y);
-			glVertex2d(X, Y);
-		}
-		glEnd();
-	}
-	for (Field::Board board : gfield.boards) {
-		std::cerr << "poi" << std::endl;
-		switch(board.id) {
-		case Field::Board::OBSTACLE:
-			// 緑
-			glColor3d(0, 1.0, 0);
-			break;
-		case Field::Board::CHANGE_DIRECTION:
-			// 青
-			glColor3d(0, 0, 1.0);
-			break;
-		case Field::Board::START:
-			// 黄色
-			glColor3d(1.0, 1.0, 0);
-			break;
-		case Field::Board::HOLE:
-			// 紫
-			glColor3d(1.0, 0, 1.0);
-			break;
-		case Field::Board::GOAL:
-			// 水色
-			glColor3d(0, 1.0, 1.0);
-			break;
-		default:
-			std::cout << "unko" << std::endl;
-			break;
-		}
-		glBegin(GL_POLYGON);
-		for (int i = 0; i < 4; i++) {
-			double X = real(board.position[i])/782*2-1;
-			double Y = -(imag(board.position[i])/530*2-1);
-			//convert(X, Y);
-			glVertex2d(X, Y);
-		}
-		glEnd();
-	}
-	glFlush();
+	glTranslated(x, y, 0);
+
+	glutSolidSphere(0.1, 20, 20);//球の描画
+
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_LIGHTING);
+	glDisable(GL_LIGHT0);
+
+	glutSwapBuffers();
+	//glViewport(0, 0, width, height);
+	////GLfloat color[4] = {0.0, 0.8, 0.7, 1.0};//球の色指定
+	//glClearColor(1.0, 1.0, 1.0, 0); // 背景色
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	//const double x = real(gsimulator.circle.p)/782*2-1.;
+	//const double y = imag(gsimulator.circle.p)/530*2-1.;
+
+	//std::cout << x << " " << y <<  std::endl;
+
+	//glDisable(GL_TEXTURE_2D);
+	//glLoadIdentity();
+	//glColor3d(1.0, 0, 0);
+	//glPointSize(15);
+	//if (gsimulator.ballIsMoving) {
+	//	glBegin(GL_POLYGON);
+	//	for (int i = 0; i < 32; i++) {
+	//		double X = x+gsimulator.circle.r/782*2*std::cos(2*M_PI*i/32);
+	//		double Y = -(y+gsimulator.circle.r/530*2*std::sin(2*M_PI*i/32));
+	//		//convert(X, Y);
+	//		glVertex2d(X, Y);
+	//	}
+	//	glEnd();
+	//}
+	//for (Field::Board board : gfield.boards) {
+	//	std::cerr << "poi" << std::endl;
+	//	switch(board.id) {
+	//	case Field::Board::OBSTACLE:
+	//		// 緑
+	//		glColor3d(0, 1.0, 0);
+	//		break;
+	//	case Field::Board::CHANGE_DIRECTION:
+	//		// 青
+	//		glColor3d(0, 0, 1.0);
+	//		break;
+	//	case Field::Board::START:
+	//		// 黄色
+	//		glColor3d(1.0, 1.0, 0);
+	//		break;
+	//	case Field::Board::HOLE:
+	//		// 紫
+	//		glColor3d(1.0, 0, 1.0);
+	//		break;
+	//	case Field::Board::GOAL:
+	//		// 水色
+	//		glColor3d(0, 1.0, 1.0);
+	//		break;
+	//	default:
+	//		std::cout << "unko" << std::endl;
+	//		break;
+	//	}
+	//	glBegin(GL_POLYGON);
+	//	for (int i = 0; i < 4; i++) {
+	//		double X = real(board.position[i])/782*2-1;
+	//		double Y = -(imag(board.position[i])/530*2-1);
+	//		//convert(X, Y);
+	//		glVertex2d(X, Y);
+	//	}
+	//	glEnd();
+	//}
+	//glFlush();
 }
 
 
 
 void reshape(int w, int h)
 {
-	glViewport(0, 0, (GLsizei)w, (GLsizei)h);
 	glMatrixMode(GL_PROJECTION);
+	glViewport(0,0,w,h);
 	glLoadIdentity();
-	//gluPerspective(30.0, (double)w / (double)h, 1.0, 800.0);
+	double a = atan(1.0/100.0) * 360.0 /(2.0*3.141592)*2.0;
+	gluPerspective( a , 1280.0/800.0 ,0.01 , 200);
+	gluLookAt(0.0, 0.0, 100.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);//視点
 	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+
+	//glViewport(0, 0, (GLsizei)w, (GLsizei)h);
+	//glMatrixMode(GL_PROJECTION);
+	//glLoadIdentity();
+	////gluPerspective(30.0, (double)w / (double)h, 1.0, 800.0);
+	//glMatrixMode(GL_MODELVIEW);
+	//glLoadIdentity();
 }
 
 //=======================================================
@@ -277,6 +344,7 @@ void Init(void)
 	glutSetWindow(winID[1]);
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
+	glutKeyboardFunc(KeyEvent);
 	glutSetWindow(winID[0]);
 
 	// H_pc行列の初期化
@@ -287,6 +355,15 @@ void Init(void)
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
 			std::cout << H_pc.mat[i][j] << " ";
+		}
+		std::cout << std::endl;
+	}
+	std::ifstream ifs2("Data/H_pw.txt");
+	for (int i = 0; i < 3; i++) for (int j = 0; j < 3; j++) ifs2 >> H_pw[3*i+j];
+	std::cout << "initialize H_pw mat" << std::endl;
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			std::cout << H_pw[3*i+j] << " ";
 		}
 		std::cout << std::endl;
 	}
@@ -525,6 +602,11 @@ void KeyEvent( unsigned char key, int x, int y )
 		printf("*** %f (frame/sec)\n", (double)count/arUtilTimer());
 		Cleanup();
 		exit(0);
+	}
+	if(key == ' '){//スペースキーでウインドウモードを切り替え
+		if(Change == false){Change = true;}
+		else{Change = false;}
+		fullscreen();
 	}
 }
 
