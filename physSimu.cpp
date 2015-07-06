@@ -24,6 +24,8 @@ const Real radius = 25;
 
 physSimu::physSimu() {
 	ballIsMoving = false;
+	ballIsClear = false;
+	ballIsOver = false;
 	circle.r = radius;
 }
 
@@ -132,7 +134,7 @@ void physSimu::simulate(const Field& field, Real t) {
 	// 任意のシミュレーションで行う処理:摩擦を受けて速度を微減させる
 	Real length = abs(v);
 	if (eq(length, 0)) return;
-	v *= 0.994;
+	v *= 0.998;
 }
 
 void physSimu::shootBall(const Field& field, const Real& startV){
@@ -155,18 +157,22 @@ void physSimu::shootBall(const Field& field, const Real& startV){
 	}
 	t = 0;
 	ballIsMoving = true;
+	ballIsOver = false;
+	ballIsClear = false;
 }
 
 void physSimu::fallIntoHole(const Field& field){
 	v = 0;
 	ballIsMoving = false;	
 	std::cout << "GAME OVER..." << std::endl;
+	ballIsOver = true;
 }
 
 void physSimu::arrivedAtGoal(const Field& field){
 	v = 0;
 	ballIsMoving = false;
 	std::cout << "GOAL!!!!!" << std::endl;
+	ballIsClear = true;
 }
 
 void physSimu::changeState(Real x, Real y, Real vx, Real vy) {

@@ -36,7 +36,7 @@ void display(void)
 	v=265.0;
 	homography(u,v);
 	//std::cout <<u << std::endl;
-	double x = (u/640.0-1.0)*(1280.0/800.0) ;
+	double x = (u/640.0-1.0)/*(1280.0/800.0)*/;
 	double y = (v/400.0-1.0)*(-1.0);
 	glLoadIdentity();
 	glTranslated(x,y, z);

@@ -20,6 +20,8 @@ public:
 	void shootBall(const Field& field, const Real& startV);
 	//ボールを発射したか否か
 	bool ballIsMoving;
+	bool ballIsClear;
+	bool ballIsOver;
 	//穴に落ちたらボールを消す処理
 	void fallIntoHole(const Field&);
 	//ゴール処理
